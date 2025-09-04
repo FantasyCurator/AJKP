@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJK Police new</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f5f8fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a3a6c 0%, #2a5298 100%);
+            color: white;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 35px;
+            background: transparent;
+        }
+        .logo i {
+            font-size: 50px;
+            color: white;
+        }
+        .header-text {
+            text-align: left;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            border: none;
+        }
+        .card-header {
+            background: linear-gradient(120deg, #f8f9fa 0%, #e9ecef 100%);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #1a3a6c 0%, #2a5298 100%);
+            border: none;
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+        }
+        .btn-google {
+            background: linear-gradient(135deg, #4285F4 0%, #34A853 100%);
+            border: none;
+            color: white;
+        }
+        .required:after {
+            content: " *";
+            color: red;
+        }
+        .submit-container {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px dashed #ccc;
+        }
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .table thead {
+            background: linear-gradient(120deg, #1a3a6c 0%, #2a5298 100%);
+            color: white;
+        }
+        .table-hover tbody tr:hover {
+            background-color: rgba(26, 58, 108, 0.1);
+        }
+        .action-btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+        .footer {
+            background: linear-gradient(135deg, #1a3a6c 0%, #2a5298 100%);
+            color: white;
+            padding: 1rem 0;
+            margin-top: 2rem;
+            border-radius: 10px 10px 0 0;
+        }
+        .cnic-input {
+            font-family: monospace;
+            letter-spacing: 1px;
+        }
+        .google-sheets-info {
+            background-color: #e8f4f8;
+            border-left: 4px solid #4285f4;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .spinner-border {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .logo {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            .header-text {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <!-- Replaced local image with Font Awesome icon -->
+                    <i class="fas fa-shield-alt" style="font-size: 70px;"></i>
+                </div>
+                <div class="header-text">
+                    <h1>Police Region Office Mirpur</h1>
+                    <p class="lead mb-0">Employee's Family details for Computerized Medical Card</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="google-sheets-info">
+            <h5><i class="fab fa-google-drive me-2"></i>Google Sheets Integration</h5>
+            <p class="mb-0">Your data will be saved directly to Google Sheets. Please ensure you've completed all setup steps.</p>
+        </div>
+
+        <!-- Form 1: Employee Details -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-user me-2"></i>Employee Information</h5>
+            </div>
+            <div class="card-body">
+                <form id="personalForm">
+                    <div class="mb-3">
+                        <label for="postingPlace" class="form-label required">Posting Place</label>
+                        <select class="form-select" id="postingPlace" required>
+                            <option value="" selected disabled>Select Posting Place</option>
+                            <option value="Region Office">Region Office</option>
+                            <option value="District Mirpur">District Mirpur</option>
+                            <option value="District Kotli">District Kotli</option>
+                            <option value="District Bhimber">District Bhimber</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label required">Full Name</label>
+                        <input type="text" class="form-control" id="fullName" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="designation" class="form-label required">Designation</label>
+                        <input type="text" class="form-control" id="designation" placeholder="e.g SC, ASI, FC-56" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="employeeCnic" class="form-label required">Employee CNIC</label>
+                        <input type="text" class="form-control cnic-input" id="employeeCnic" 
+                               placeholder="Enter 13 digits without hyphens" maxlength="13" 
+                               pattern="[0-9]{13}" title="Please enter exactly 13 digits" required>
+                        <div class="form-text">Enter without hyphens (e.g., 1234567890123)</div>
+                    </div>
+                    <button type="button" class="btn btn-primary mt-3" id="addFamilyBtn">
+                        <i class="fas fa-plus-circle me-2"></i>Add Family Member
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Form 2: Family Details Form (Initially Hidden) -->
+        <div class="card mb-4" id="familyFormContainer" style="display: none;">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-users me-2"></i>Add Family Member</h5>
+            </div>
+            <div class="card-body">
+                <form id="familyForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="relationship" class="form-label required">Relationship</label>
+                            <select class="form-select" id="relationship" required>
+                                <option value="" selected disabled>Select relationship</option>
+                                <option value="Parent/Guardian">Parent/Guardian</option>
+                                <option value="Spouse">Spouse</option>
+                                <option value="Son">Son</option>
+                                <option value="Daughter">Daughter</option>
+                                <option value="Special Child">Special Child</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="familyName" class="form-label required">Full Name</label>
+                            <input type="text" class="form-control" id="familyName" placeholder="Enter family member's name" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="cnic" class="form-label required">CNIC</label>
+                            <input type="text" class="form-control cnic-input" id="cnic" 
+                                   placeholder="Enter 13 digits without hyphens" maxlength="13" 
+                                   pattern="[0-9]{13}" title="Please enter exactly 13 digits" required>
+                            <div class="form-text">Enter without hyphens (e.g., 1234567890123)</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="dob" class="form-label required">Date of Birth</label>
+                            <input type="date" class="form-control" id="dob" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="maritalstatus" class="form-label required">Marital Status</label>
+                            <select class="form-select" id="maritalstatus" required>
+                                <option value="" selected disabled>Select Status</option>
+                                <option value="Married">Married</option>
+                                <option value="Unmarried">Unmarried</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="jobstatus" class="form-label required">Job Status</label>
+                            <select class="form-select" id="jobstatus" required>
+                                <option value="" selected disabled>Select Status</option>
+                                <option value="Employed">Yes</option>
+                                <option value="Unemployed">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="button" class="btn btn-secondary" id="cancelFamilyBtn">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </button>
+                        <div>
+                            <button type="button" class="btn btn-success me-2" id="addNewRecordBtn">
+                                <i class="fas fa-plus me-2"></i>Add New Record
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Display Area for Form 2 Data -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-list me-2"></i>Family Members</h5>
+                <span class="badge bg-primary rounded-pill" id="familyCount">0</span>
+            </div>
+            <div class="card-body">
+                <div id="noFamilyMessage" class="text-center p-4">
+                    <i class="fas fa-users fa-3x mb-3 text-muted"></i>
+                    <p class="text-muted">No family members added yet. Click 'Add Family Member' to get started.<br>This information is necessary for issuing of Medical Card through HRMIS.</p>
+                </div>
+                
+                <div id="familyTableContainer" style="display: none;">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Relationship</th>
+                                    <th>Name</th>
+                                    <th>CNIC</th>
+                                    <th>Date of Birth</th>
+                                    <th>Marital Status</th>
+                                    <th>Job Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="familyMembersTable">
+                                <!-- Table rows will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Submit Button at the end of the form -->
+                <div class="submit-container text-center" id="submitContainer" style="display: none;">
+                    <button type="button" class="btn btn-google btn-lg me-2" id="submitToSheetsBtn">
+                        <i class="fab fa-google me-2"></i>Submit All Information
+                    </button>
+                    <div id="submitStatus" class="mt-3" style="display: none;">
+                        <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                        <span id="statusText">Saving Data...</span>
+                    </div>
+                    <p class="text-muted mt-2">Data will be saved directly to Google Sheets</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer text-center">
+        <p class="mb-0">2025 © AJK Police Medical Card System. All rights reserved by "Fantasy Curator"<br>Umair Hussain Steno Region Office Mirpur 0345-5511415</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Google Apps Script Web App URL (replace with your deployed Web App URL)
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwXpSADz4ucGQZoY3Np7c2BmnyCFKsURRK7Lqr5ig5UjS6P1Xj0WWr0jZjKpU6njQqq6g/exec';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const addFamilyBtn = document.getElementById('addFamilyBtn');
+            const familyFormContainer = document.getElementById('familyFormContainer');
+            const cancelFamilyBtn = document.getElementById('cancelFamilyBtn');
+            const addNewRecordBtn = document.getElementById('addNewRecordBtn');
+            const submitToSheetsBtn = document.getElementById('submitToSheetsBtn');
+            const familyForm = document.getElementById('familyForm');
+            const noFamilyMessage = document.getElementById('noFamilyMessage');
+            const familyCount = document.getElementById('familyCount');
+            const submitContainer = document.getElementById('submitContainer');
+            const familyTableContainer = document.getElementById('familyTableContainer');
+            const familyMembersTable = document.getElementById('familyMembersTable');
+            const submitStatus = document.getElementById('submitStatus');
+            const statusText = document.getElementById('statusText');
+            
+            // Family members array
+            let familyMembers = [];
+            
+            // Format CNIC from xxxxxxxxxxxxx to xxxxx-xxxxxxx-x
+            function formatCNIC(cnic) {
+                if (!cnic || cnic.length !== 13) return cnic;
+                return cnic.replace(/(\d{5})(\d{7})(\d{1})/, '$1-$2-$3');
+            }
+            
+            // Show family form
+            addFamilyBtn.addEventListener('click', function() {
+                const personalForm = document.getElementById('personalForm');
+                const postingPlace = document.getElementById('postingPlace').value;
+                const fullName = document.getElementById('fullName').value;
+                const designation = document.getElementById('designation').value;
+                const employeeCnic = document.getElementById('employeeCnic').value;
+                
+                if (!postingPlace || !fullName || !designation || !employeeCnic) {
+                    alert('Please complete all required fields in the employee information form first.');
+                    return;
+                }
+                
+                if (employeeCnic.length !== 13) {
+                    alert('Please enter a valid 13-digit CNIC for the employee.');
+                    return;
+                }
+                
+                familyFormContainer.style.display = 'block';
+                // Scroll to family form
+                familyFormContainer.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Cancel adding family member
+            cancelFamilyBtn.addEventListener('click', function() {
+                familyFormContainer.style.display = 'none';
+                familyForm.reset();
+            });
+            
+            // Add new family member record
+            addNewRecordBtn.addEventListener('click', function() {
+                if (validateFamilyForm()) {
+                    addFamilyMember();
+                    familyForm.reset();
+                    // Keep the form open for next entry
+                    familyFormContainer.style.display = 'block';
+                }
+            });
+            
+            // Submit to main Database through this Form
+            submitToSheetsBtn.addEventListener('click', async function() {
+                // Validate employee form
+                const postingPlace = document.getElementById('postingPlace').value;
+                const fullName = document.getElementById('fullName').value;
+                const designation = document.getElementById('designation').value;
+                const employeeCnic = document.getElementById('employeeCnic').value;
+                
+                if (!postingPlace || !fullName || !designation || !employeeCnic) {
+                    alert('Please complete all required fields in the employee information form first.');
+                    return;
+                }
+                
+                if (employeeCnic.length !== 13) {
+                    alert('Please enter a valid 13-digit CNIC for the employee.');
+                    return;
+                }
+                
+                // Validate at least one family member
+                if (familyMembers.length === 0) {
+                    alert('Please add at least one family member before submitting.');
+                    return;
+                }
+                
+                // Show loading status
+                submitStatus.style.display = 'block';
+                statusText.textContent = 'Saving to Main Database...';
+                submitToSheetsBtn.disabled = true;
+                
+                // Prepare data for submission
+                const formData = {
+                    employee: {
+                        postingPlace: postingPlace,
+                        fullName: fullName,
+                        designation: designation,
+                        cnic: formatCNIC(employeeCnic)
+                    },
+                    familyMembers: familyMembers
+                };
+                
+                try {
+                    // Send data to Google Apps Script
+                    const response = await fetch(scriptURL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    // Check if the request was successful
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.result === 'success') {
+                            statusText.textContent = 'Data saved successfully to Database!';
+                            statusText.classList.add('text-success');
+                            
+                            // Reset forms after a delay
+                            setTimeout(() => {
+                                document.getElementById('personalForm').reset();
+                                familyForm.reset();
+                                familyMembers = [];
+                                renderFamilyMembers();
+                                familyFormContainer.style.display = 'none';
+                                submitContainer.style.display = 'none';
+                                submitStatus.style.display = 'none';
+                                statusText.classList.remove('text-success');
+                                submitToSheetsBtn.disabled = false;
+                            }, 2000);
+                        } else {
+                            throw new Error(result.error || 'Unknown error occurred');
+                        }
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    statusText.textContent = 'Error saving data. Please try again. Error: ' + error.message;
+                    statusText.classList.add('text-danger');
+                    submitToSheetsBtn.disabled = false;
+                    
+                    // Reset error status after a delay
+                    setTimeout(() => {
+                        submitStatus.style.display = 'none';
+                        statusText.classList.remove('text-danger');
+                    }, 5000);
+                }
+            });
+            
+            // Validate family form
+            function validateFamilyForm() {
+                const relationship = document.getElementById('relationship').value;
+                const familyName = document.getElementById('familyName').value;
+                const cnic = document.getElementById('cnic').value;
+                const dob = document.getElementById('dob').value;
+                const maritalStatus = document.getElementById('maritalstatus').value;
+                const jobStatus = document.getElementById('jobstatus').value;
+                
+                if (!relationship || !familyName || !cnic || !dob || !maritalStatus || !jobStatus) {
+                    alert('Please complete all required fields in the family details form.');
+                    return false;
+                }
+                
+                // CNIC validation (exactly 13 digits)
+                if (cnic.length !== 13 || !/^\d+$/.test(cnic)) {
+                    alert('Please enter a valid 13-digit CNIC without hyphens.');
+                    return false;
+                }
+                
+                return true;
+            }
+            
+            // Add family member to the list
+            function addFamilyMember() {
+                const relationship = document.getElementById('relationship').value;
+                const familyName = document.getElementById('familyName').value;
+                const cnic = document.getElementById('cnic').value;
+                const dob = document.getElementById('dob').value;
+                const maritalStatus = document.getElementById('maritalstatus').value;
+                const jobStatus = document.getElementById('jobstatus').value;
+                
+                const familyMember = {
+                    relationship,
+                    name: familyName,
+                    cnic: formatCNIC(cnic),
+                    dob,
+                    maritalStatus,
+                    jobStatus
+                };
+                
+                familyMembers.push(familyMember);
+                renderFamilyMembers();
+                
+                // Show the submit button if we have at least one family member
+                if (familyMembers.length > 0) {
+                    submitContainer.style.display = 'block';
+                }
+            }
+            
+            // Render family members list in table
+            function renderFamilyMembers() {
+                if (familyMembers.length === 0) {
+                    noFamilyMessage.style.display = 'block';
+                    familyTableContainer.style.display = 'none';
+                    familyMembersTable.innerHTML = '';
+                    familyCount.textContent = '0';
+                    submitContainer.style.display = 'none';
+                    return;
+                }
+                
+                noFamilyMessage.style.display = 'none';
+                familyTableContainer.style.display = 'block';
+                familyCount.textContent = familyMembers.length;
+                
+                let html = '';
+                familyMembers.forEach((member, index) => {
+                    const formattedDate = new Date(member.dob).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    
+                    html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${member.relationship}</td>
+                        <td>${member.name}</td>
+                        <td>${member.cnic}</td>
+                        <td>${formattedDate}</td>
+                        <td>${member.maritalStatus}</td>
+                        <td>${member.jobStatus}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-danger action-btn" onclick="deleteFamilyMember(${index})">
+                                <i class="fas fa-trash"></i> Remove
+                            </button>
+                        </td>
+                    </tr>
+                    `;
+                });
+                
+                familyMembersTable.innerHTML = html;
+            }
+            
+            // Delete family member (needs to be global for inline onclick to work)
+            window.deleteFamilyMember = function(index) {
+                if (confirm('Are you sure you want to remove this family member?')) {
+                    familyMembers.splice(index, 1);
+                    renderFamilyMembers();
+                }
+            };
+        });
+    </script>
+</body>
+</html>
