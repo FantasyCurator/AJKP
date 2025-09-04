@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AJKP Medical Card System</title>
+    <title>AJKP Region Mirpur</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -157,7 +157,7 @@
                 <form id="personalForm">
                     <div class="mb-3">
                         <label for="postingPlace" class="form-label required">Posting Place</label>
-   						<select class="form-select" id="postingPlace" name="postingPlace" required>
+                        <select class="form-select" id="postingPlace" name="postingPlace" required>
                             <option value="" selected disabled>Select Posting Place</option>
                             <option value="Region Office">Region Office</option>
                             <option value="Mirpur">District Mirpur</option>
@@ -166,19 +166,18 @@
                         </select>
                     </div>
                     <div class="mb-3">
-    					<label for="fullName" class="form-label required">Full Name</label>
-    					<input type="text" class="form-control" id="fullName" name="fullName" placeholder="Enter your full name" required>
-					</div>
-					<div class="mb-3">
-    					<label for="designation" class="form-label required">Designation</label>
-    					<input type="text" class="form-control" id="designation" name="designation" placeholder="e.g SC, ASI, FC-56" required>
-					</div>
-					<div class="mb-3">
-    					<label for="employeeCnic" class="form-label required">Employee CNIC</label>
-    					<input type="text" class="form-control cnic-input" id="employeeCnic" name="employeeCnic" 
-           					placeholder="Enter 13 digits without hyphens" maxlength="13" 
-           					pattern="[0-9]{13}" title="Please enter exactly 13 digits" required>
-					</div>
+                        <label for="fullName" class="form-label required">Full Name</label>
+                        <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="designation" class="form-label required">Designation</label>
+                        <input type="text" class="form-control" id="designation" name="designation" placeholder="e.g SC, ASI, FC-56" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="employeeCnic" class="form-label required">Employee CNIC</label>
+                        <input type="text" class="form-control cnic-input" id="employeeCnic" name="employeeCnic"
+                               placeholder="Enter 13 digits without hyphens" maxlength="13" 
+                               pattern="[0-9]{13}" title="Please enter exactly 13 digits" required>
                         <div class="form-text">Enter without hyphens (e.g., 1234567890123)</div>
                     </div>
                     <button type="button" class="btn btn-primary mt-3" id="addFamilyBtn">
@@ -198,12 +197,12 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="relationship" class="form-label required">Relationship</label>
-                            <select class="form-select" id="relationship" required>
+                            <select class="form-select" id="relationship" name="relationship" required>
                                 <option value="" selected disabled>Select relationship</option>
                                 <option value="Father">Father</option>
-                        	<option value="Mother">Mother</option>
+                                <option value="Mother">Mother</option>
                                 <option value="Wife">Wife</option>
-				<option value="Husband">Husband</option>
+                                <option value="Husband">Husband</option>
                                 <option value="Son">Son</option>
                                 <option value="Daughter">Daughter</option>
                                 <option value="Special Child">Special Child</option>
@@ -211,26 +210,26 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="familyName" class="form-label required">Full Name</label>
-                            <input type="text" class="form-control" id="familyName" placeholder="Enter family member's name" required>
+                            <input type="text" class="form-control" id="familyName" name="familyName" placeholder="Enter family member's name" required>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="cnic" class="form-label required">CNIC</label>
-                            <input type="text" class="form-control cnic-input" id="cnic" 
+                            <input type="text" class="form-control cnic-input" id="cnic" name="cnic"
                                    placeholder="Enter 13 digits without hyphens" maxlength="13" 
                                    pattern="[0-9]{13}" title="Please enter exactly 13 digits" required>
                             <div class="form-text">Enter without hyphens (e.g., 1234567890123)</div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="dob" class="form-label required">Date of Birth</label>
-                            <input type="date" class="form-control" id="dob" required>
+                            <input type="date" class="form-control" id="dob" name="dob" required>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="maritalstatus" class="form-label required">Marital Status</label>
-                            <select class="form-select" id="maritalstatus" required>
+                            <select class="form-select" id="maritalstatus" name="maritalstatus" required>
                                 <option value="" selected disabled>Select Status</option>
                                 <option value="Married">Married</option>
                                 <option value="Unmarried">Unmarried</option>
@@ -238,7 +237,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="jobstatus" class="form-label required">Job Status</label>
-                            <select class="form-select" id="jobstatus" required>
+                            <select class="form-select" id="jobstatus" name="jobstatus" required>
                                 <option value="" selected disabled>Select Status</option>
                                 <option value="Employed">Yes</option>
                                 <option value="Unemployed">No</option>
@@ -316,7 +315,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Google Apps Script Web App URL (replace with your deployed Web App URL)
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxgxsOYvzB-Bn8D0_If_FNsYev14P7Dmp4wDdc5SVMndtxYxzVuPXeEfN7J-tYWmX29/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwXpSADz4ucGQZoY3Np7c2BmnyCFKsURRK7Lqr5ig5UjS6P1Xj0WWr0jZjKpU6njQqq6g/exec';
         
         document.addEventListener('DOMContentLoaded', function() {
             // Elements
@@ -428,12 +427,15 @@
                         method: 'POST',
                         mode: 'no-cors',
                         headers: {
-                            'Content-Type': 'text/plain;charset=utf-8',
+                            'Content-Type': 'application/json',
                         },
                         body: JSON.stringify(formData)
                     });
                     
-                    // With no-cors mode, we can't read the response but we assume success
+                    // Note: With no-cors mode, we can't read the response
+                    // But we can assume it was successful if no error is thrown
+                    
+                    // Show success message
                     statusText.textContent = 'Data saved successfully to Database!';
                     statusText.classList.add('text-success');
                     
@@ -530,7 +532,7 @@
                 familyCount.textContent = familyMembers.length;
                 
                 let html = '';
-                familyMembers.forEach((member, index) => {
+                familyMembers.forEach((member, index) {
                     const formattedDate = new Date(member.dob).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'short',
@@ -569,5 +571,3 @@
     </script>
 </body>
 </html>
-
-
