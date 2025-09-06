@@ -532,7 +532,7 @@
                 familyCount.textContent = familyMembers.length;
                 
                 let html = '';
-                familyMembers.forEach((member, index) {
+                familyMembers.forEach((member, index) => {
                     const formattedDate = new Date(member.dob).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'short',
@@ -571,5 +571,6 @@
     </script>
 </body>
 </html>
+
 
 
