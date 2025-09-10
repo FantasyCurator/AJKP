@@ -298,7 +298,7 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="familyMembersTable">
+                            <tbody id="familyMembers">
                                 <!-- Table rows will be inserted here -->
                             </tbody>
                         </table>
@@ -386,7 +386,7 @@ function addFamilyMember() {
   tbody.appendChild(row);
 }
 
-document.getElementById("dataForm").addEventListener("submit", e => {
+document.getElementById("personalForm").addEventListener("submit", e => {
   e.preventDefault();
 
   const employee = {
