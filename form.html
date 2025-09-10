@@ -160,24 +160,20 @@
                             <option value="Bhimber">District Bhimber</option>
                         </select>
                     </div>
-                    
-    <div class="mb-3">
-      <label class="form-label">Full Name</label>
-      <input type="text" class="form-control" id="fullName" required>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Designation</label>
-      <select id="designation" class="form-select" required>
-        <option value="">Select Designation</option>
-        <option>Clerk</option>
-        <option>Assistant</option>
-        <option>Officer</option>
-      </select>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">CNIC</label>
-      <input type="text" class="form-control" id="employeeCnic" required>
-    </div>
+                        <label for="fullName" class="form-label required">Full Name</label>
+                        <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="designation" class="form-label required">Designation</label>
+                        <input type="text" class="form-control" id="designation" name="designation" placeholder="e.g SC, ASI, FC-56" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="employeeCnic" class="form-label required">Employee CNIC</label>
+                        <input type="text" class="form-control cnic-input" id="employeeCnic" name="employeeCnic"
+                               placeholder="Enter 13 digits without hyphens" maxlength="13" 
+                               pattern="[0-9]{13}" title="Please enter exactly 13 digits" required>
+                        <div class="form-text">Enter without hyphens (e.g., 1234567890123)</div>
+                    </div>
     <div class="mb-3">
       <label class="form-label">Email (Optional)</label>
       <input type="email" class="form-control" id="email">
@@ -197,6 +193,14 @@
       <input type="text" class="form-control" id="mobile">
     </div>
 
+    <button type="button" class="btn btn-primary mt-3" id="addFamilyBtn">
+          <i class="fas fa-plus-circle me-2"></i>Add Family Member
+     </button>
+         </form>
+            </div>
+        </div>
+    
+          
     <h4 class="mt-4">Family Members</h4>
     <div id="familyTableContainer" class="mb-3"></div>
     <button type="button" class="btn btn-secondary mb-3" onclick="addFamilyMember()">+ Add Family Member</button>
