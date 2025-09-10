@@ -325,105 +325,62 @@
     </footer>
     
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbxiTNPZ6hJbsgVUujUKpKkHDXe9T9IOmvYaOiTFSHz3kS5K9rt-kFkrJ0yXqpuSKAVj6A/exec"; // Replace with your Apps Script Web App URL
+const scriptURL = "https://script.google.com/macros/s/AKfycbxiTNPZ6hJbsgVUujUKpKkHDXe9T9IOmvYaOiTFSHz3kS5K9rt-kFkrJ0yXqpuSKAVj6A/exec"; 
 
-function addFamilyMember() {
-  let container = document.getElementById("familyTableContainer");
+document.getElementById("submitToSheetsBtn").addEventListener("click", function () {
+  const personalForm = document.getElementById("personalForm");
 
-  if (!document.getElementById("familyTable")) {
-    container.innerHTML = `
-      <table class="table table-bordered" id="familyTable">
-        <thead>
-          <tr>
-            <th>Relationship</th>
-            <th>Full Name</th>
-            <th>CNIC</th>
-            <th>Date of Birth</th>
-            <th>Marital Status</th>
-            <th>Job Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    `;
+  // ✅ Force HTML5 validation (email + mobile will be required now)
+  if (!personalForm.checkValidity()) {
+    personalForm.reportValidity();
+    return; // Stop submit if invalid
   }
 
-  const tbody = document.querySelector("#familyTable tbody");
-
-  const row = document.createElement("tr");
-  row.innerHTML = `
-    <td>
-      <select class="form-select" name="relationship" required>
-        <option value="">Select</option>
-        <option>Spouse</option>
-        <option>Son</option>
-        <option>Daughter</option>
-        <option>Father</option>
-        <option>Mother</option>
-      </select>
-    </td>
-    <td><input type="text" class="form-control" name="memberName" required></td>
-    <td><input type="text" class="form-control" name="memberCnic" required></td>
-    <td><input type="date" class="form-control" name="memberDob" required></td>
-    <td>
-      <select class="form-select" name="maritalStatus">
-        <option value="">Select</option>
-        <option>Single</option>
-        <option>Married</option>
-      </select>
-    </td>
-    <td>
-      <select class="form-select" name="jobStatus">
-        <option value="">Select</option>
-        <option>Student</option>
-        <option>Employed</option>
-        <option>Unemployed</option>
-      </select>
-    </td>
-    <td><button type="button" class="btn btn-danger btn-sm" onclick="this.closest('tr').remove()">X</button></td>
-  `;
-  tbody.appendChild(row);
-}
-
-document.getElementById("personalForm").addEventListener("submit", e => {
-  e.preventDefault();
-
+  // ✅ Collect employee data
   const employee = {
     postingPlace: document.getElementById("postingPlace").value,
     fullName: document.getElementById("fullName").value,
     designation: document.getElementById("designation").value,
     cnic: document.getElementById("employeeCnic").value,
     email: document.getElementById("email").value,
-    bloodGroup: document.getElementById("bloodGroup").value,
-    mobile: document.getElementById("mobile").value
+    mobile: document.getElementById("mobile").value,
+    bloodGroup: document.getElementById("blood").value  // ✅ fixed ID mismatch
   };
 
-  const rows = document.querySelectorAll("#familyTable tbody tr");
-  const familyMembers = Array.from(rows).map(row => ({
-    relationship: row.querySelector("[name='relationship']").value,
-    name: row.querySelector("[name='memberName']").value,
-    cnic: row.querySelector("[name='memberCnic']").value,
-    dob: row.querySelector("[name='memberDob']").value,
-    maritalStatus: row.querySelector("[name='maritalStatus']").value,
-    jobStatus: row.querySelector("[name='jobStatus']").value
+  // ✅ Collect family members
+  const rows = document.querySelectorAll("#familyMembers tr");
+  const familyMembers = Array.from(rows).map((row) => ({
+    relationship: row.cells[1].innerText,
+    name: row.cells[2].innerText,
+    cnic: row.cells[3].innerText,
+    dob: row.cells[4].innerText,
+    maritalStatus: row.cells[5].innerText,
+    jobStatus: row.cells[6].innerText,
   }));
 
+  // ✅ Show loading spinner
+  document.getElementById("submitStatus").style.display = "block";
+
+  // ✅ Send data to Google Apps Script
   fetch(scriptURL, {
     method: "POST",
     body: new URLSearchParams({
       employee: JSON.stringify(employee),
-      familyMembers: JSON.stringify(familyMembers)
+      familyMembers: JSON.stringify(familyMembers),
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      document.getElementById("statusText").innerText = "✅ Data saved successfully!";
+      setTimeout(() => {
+        document.getElementById("submitStatus").style.display = "none";
+      }, 3000);
     })
-  })
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById("responseMessage").innerText = data.message;
-  })
-  .catch(err => {
-    document.getElementById("responseMessage").innerText = "Error: " + err.message;
-  });
+    .catch((err) => {
+      document.getElementById("statusText").innerText = "❌ Error: " + err.message;
+    });
 });
 </script>
+
 </body>
 </html>
