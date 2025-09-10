@@ -143,12 +143,24 @@
     </div>
 
   
-  <form id="dataForm" class="card p-4 shadow-sm">
-    <h4>Employee Information</h4>
-    <div class="mb-3">
-      <label class="form-label">Posting Place</label>
-      <input type="text" class="form-control" id="postingPlace" required>
-    </div>
+        <!-- Form 1: Employee Details -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-user me-2"></i>Employee Information</h5>
+            </div>
+            <div class="card-body">
+                <form id="personalForm">
+                    <div class="mb-3">
+                        <label for="postingPlace" class="form-label required">Posting Place</label>
+                        <select class="form-select" id="postingPlace" name="postingPlace" required>
+                            <option value="" selected disabled>Select Posting Place</option>
+                            <option value="Region Office">Region Office</option>
+                            <option value="Mirpur">District Mirpur</option>
+                            <option value="Kotli">District Kotli</option>
+                            <option value="Bhimber">District Bhimber</option>
+                        </select>
+                    </div>
+                    
     <div class="mb-3">
       <label class="form-label">Full Name</label>
       <input type="text" class="form-control" id="fullName" required>
