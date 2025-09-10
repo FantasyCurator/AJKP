@@ -404,6 +404,55 @@ document.getElementById("addFamilyBtn").addEventListener("click", function () {
 document.getElementById("cancelFamilyBtn").addEventListener("click", function () {
   document.getElementById("familyFormContainer").style.display = "none";
 });
+    // --- Add New Family Record ---
+document.getElementById("addNewRecordBtn").addEventListener("click", function () {
+  // Family form se values get karo
+  const relationship = document.getElementById("relationship").value;
+  const familyName = document.getElementById("familyName").value.trim();
+  const cnic = document.getElementById("cnic").value.trim();
+  const dob = document.getElementById("dob").value;
+  const maritalStatus = document.getElementById("maritalstatus").value;
+  const jobStatus = document.getElementById("jobstatus").value;
+
+  // Validation check
+  if (!relationship || !familyName || !cnic || !dob || !maritalStatus || !jobStatus) {
+    alert("⚠️ Please fill all required family member fields.");
+    return;
+  }
+
+  // Table aur counter show karna
+  document.getElementById("familyTableContainer").style.display = "block";
+  document.getElementById("noFamilyMessage").style.display = "none";
+  document.getElementById("submitContainer").style.display = "block";
+
+  const tbody = document.getElementById("familyMembers");
+  const rowCount = tbody.rows.length + 1;
+
+  // Row insert karna
+  const row = tbody.insertRow();
+  row.innerHTML = `
+    <td>${rowCount}</td>
+    <td>${relationship}</td>
+    <td>${familyName}</td>
+    <td>${cnic}</td>
+    <td>${dob}</td>
+    <td>${maritalStatus}</td>
+    <td>${jobStatus}</td>
+    <td><button type="button" class="btn btn-danger btn-sm" onclick="this.closest('tr').remove(); updateFamilyCount();">Delete</button></td>
+  `;
+
+  // Counter update
+  updateFamilyCount();
+
+  // Family form reset karna
+  document.getElementById("familyForm").reset();
+});
+
+// --- Update family member counter ---
+function updateFamilyCount() {
+  const tbody = document.getElementById("familyMembers");
+  document.getElementById("familyCount").innerText = tbody.rows.length;
+}
 </script>
 
 </body>
