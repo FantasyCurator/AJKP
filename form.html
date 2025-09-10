@@ -173,26 +173,20 @@
                                placeholder="Enter 13 digits without hyphens" maxlength="13" 
                                pattern="[0-9]{13}" title="Please enter exactly 13 digits" required>
                         <div class="form-text">Enter without hyphens (e.g., 1234567890123)</div>
+                     <div class="mb-3">
+                        <label for="email" class="form-label required">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
                     </div>
-    <div class="mb-3">
-      <label class="form-label">Email (Optional)</label>
-      <input type="email" class="form-control" id="email">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Blood Group</label>
-      <select id="bloodGroup" class="form-select">
-        <option value="">Select Blood Group</option>
-        <option>A+</option><option>A-</option>
-        <option>B+</option><option>B-</option>
-        <option>O+</option><option>O-</option>
-        <option>AB+</option><option>AB-</option>
-      </select>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Mobile Number (Optional)</label>
-      <input type="text" class="form-control" id="mobile">
-    </div>
-
+                    <div class="mb-3">
+                        <label for="mobile" class="form-label required">Mobile Number</label>
+                        <input type="text" class="form-control" id="mobile" name="mobile" required>
+                    </div> 
+                    <div class="mb-3">
+                        <label for="blood" class="form-label required">Blood Group</label>
+                        <input type="text" class="form-control" id="blood" name="blood">
+                    </div>        
+                    </div>
+    
     <button type="button" class="btn btn-primary mt-3" id="addFamilyBtn">
           <i class="fas fa-plus-circle me-2"></i>Add Family Member
      </button>
