@@ -380,6 +380,30 @@ document.getElementById("submitToSheetsBtn").addEventListener("click", function 
       document.getElementById("statusText").innerText = "❌ Error: " + err.message;
     });
 });
+    // --- Show Family Form when "Add Family Member" clicked ---
+document.getElementById("addFamilyBtn").addEventListener("click", function () {
+  // Pehle check karein ke employee form filled hai ya nahi
+  if (
+    document.getElementById("postingPlace").value === "" ||
+    document.getElementById("fullName").value.trim() === "" ||
+    document.getElementById("designation").value.trim() === "" ||
+    document.getElementById("employeeCnic").value.trim() === "" ||
+    document.getElementById("email").value.trim() === "" ||
+    document.getElementById("mobile").value.trim() === ""
+  ) {
+    alert("⚠️ Pehle employee ki saari required information fill karein.");
+    return;
+  }
+
+  // Agar sab filled hai to family form dikha do
+  document.getElementById("familyFormContainer").style.display = "block";
+  document.getElementById("noFamilyMessage").style.display = "none";
+});
+
+// --- Cancel Button (hide family form) ---
+document.getElementById("cancelFamilyBtn").addEventListener("click", function () {
+  document.getElementById("familyFormContainer").style.display = "none";
+});
 </script>
 
 </body>
