@@ -1,0 +1,21 @@
+body {
+  background-color: #f5f8fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header {
+  background: linear-gradient(135deg, #1a3a6c, #2a5298);
+  color: white;
+  border-radius: 0 0 10px 10px;
+}
+
+.footer {
+  background: linear-gradient(135deg, #1a3a6c, #2a5298);
+  color: white;
+  border-radius: 10px 10px 0 0;
+}
+
+.card {
+  border-radius: 10px;
+  border: none;
+}
