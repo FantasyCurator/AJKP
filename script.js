@@ -1,5 +1,5 @@
 // Replace with your published Web App URL (deploy as "Anyone")
-const scriptURL = "WEB_APP_URL_HERE";
+const scriptURL = "https://script.google.com/macros/s/AKfycbwuJvmEFR8_ZCG3aKcb9wORZ02YS9AFdzcsQ30IEEHuRoJjbae9dkqdNvsm-zb9Fjt8eQ/exec";
 
 document.addEventListener('DOMContentLoaded', () => {
   const addFamilyBtn = document.getElementById('addFamilyBtn');
@@ -196,3 +196,4 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 }); // DOMContentLoaded
+
