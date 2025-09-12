@@ -2,74 +2,98 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background: #f4f7f9;
+  background: #f4f6f9;
 }
 
 header {
-  background: linear-gradient(to right, #004e92, #000428);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #007BFF;
   color: white;
-  padding: 20px;
+  padding: 15px;
+}
+
+header .logo {
+  height: 50px;
+  margin-right: 20px;
+}
+
+h1, h2 {
   text-align: center;
 }
 
-.logo-space {
-  height: 50px;
-  margin-bottom: 10px;
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: 10px auto;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
 }
 
-main {
-  padding: 20px;
+label {
+  margin-top: 10px;
+  font-weight: bold;
 }
 
-form label {
-  display: block;
-  margin: 10px 0;
-}
-
-input, select {
-  width: 100%;
-  padding: 6px;
-  margin-top: 4px;
+input, select, button {
+  padding: 8px;
+  margin-top: 5px;
 }
 
 button {
-  background: #004e92;
+  margin-top: 15px;
+  background: #007BFF;
   color: white;
-  padding: 10px 16px;
   border: none;
-  margin-top: 10px;
+  border-radius: 5px;
   cursor: pointer;
-  border-radius: 4px;
 }
 
 button:hover {
-  background: #003366;
-}
-
-.hidden {
-  display: none;
+  background: #0056b3;
 }
 
 table {
-  width: 100%;
+  width: 80%;
+  margin: 20px auto;
   border-collapse: collapse;
-  margin-top: 15px;
   background: white;
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
 }
 
-table, th, td {
-  border: 1px solid #ccc;
-}
-
-th, td {
-  padding: 8px;
-  text-align: center;
-}
-
-footer {
-  background: #000428;
-  color: white;
-  text-align: center;
+table th, table td {
+  border: 1px solid #ddd;
   padding: 10px;
+  text-align: center;
+}
+
+table th {
+  background: #007BFF;
+  color: white;
+}
+
+.footer {
+  text-align: center;
   margin-top: 20px;
+  padding: 10px;
+  font-size: 14px;
+  color: #555;
+  background: #f1f1f1;
+}
+
+.footer .whatsapp-link {
+  text-decoration: none;
+  color: #25D366;
+  font-weight: bold;
+}
+
+.footer .whatsapp-icon {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  margin-right: 5px;
 }
