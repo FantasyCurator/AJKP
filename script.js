@@ -69,7 +69,7 @@ document.getElementById("submitToSheetsBtn").addEventListener("click", () => {
 
   document.getElementById("statusText").innerText = "Saving...";
 
-  fetch("YOUR_WEB_APP_URL", {
+  fetch("https://script.google.com/macros/s/AKfycbys8cxoEfbLXs85_plBSaygl_65mBc6wldEqAcnHSYe60ex7Uf2rRh-D0yZ_1Kjh4GHmQ/exec", {
     method: "POST",
     body: JSON.stringify(data)
   })
@@ -90,3 +90,4 @@ document.getElementById("submitToSheetsBtn").addEventListener("click", () => {
     document.getElementById("statusText").innerText = "Error saving data!";
   });
 });
+
