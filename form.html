@@ -1,186 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AJKP - Employee & Family Information</title> 
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AJKP - Employee & Family Information</title>
+
+  <!-- Bootstrap (kept as you used) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Your original styling, preserved & slightly tuned for header layout */
+    body {
+      background-color: #f5f8fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .header {
+      background: linear-gradient(135deg, #1a3a6c 0%, #2a5298 100%);
+      color: white;
+      padding: 1.25rem 0.75rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    /* header inner layout: logo left, heading centered overall */
+    .header-content {
+      display:flex;
+      align-items:center;
+      justify-content:center; /* centers entire group horizontally */
+      gap: 20px;
+    }
+    .logo {
+      width: 90px;
+      height: 90px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-left: -80px; /* pull left so group remains visually centered but logo sits left */
+    }
+    .logo img { max-width:100%; max-height:100%; display:block; }
+    .header-text { text-align:center; }
+    .header-text h1 { margin:0; font-size:1.6rem; font-weight:600; }
+    .header-text p { margin:0; opacity:0.95; }
+
+    .card { border-radius:10px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); border:none; }
+    .card-header { background: linear-gradient(120deg,#f8f9fa 0%,#e9ecef 100%); border-bottom:1px solid rgba(0,0,0,0.05); font-weight:600; color:#2c3e50; }
+    .btn-primary { background: linear-gradient(135deg,#1a3a6c 0%,#2a5298 100%); border:none; }
+    .btn-success { background: linear-gradient(135deg,#28a745 0%,#20c997 100%); border:none; }
+    .btn-google { background: linear-gradient(135deg,#4285F4 0%,#34A853 100%); border:none; color:white; }
+    .required:after { content:" *"; color:red; }
+    .footer { background: linear-gradient(135deg,#1a3a6c 0%,#2a5298 100%); color:white; padding:1rem 0; margin-top:1.5rem; border-radius:10px 10px 0 0; text-align:center; }
+    .table thead { background: linear-gradient(120deg,#1a3a6c 0%,#2a5298 100%); color:white; }
+    .cnic-input { font-family:monospace; letter-spacing:1px; }
+    @media(max-width:768px) {
+      .header-content { flex-direction:column; gap:10px; }
+      .logo { margin-left:0; }
+    }
+  </style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="header text-center py-3 d-flex justify-content-center align-items-center">
-    <img src="logo.png" alt="Logo" style="height:50px; margin-right:15px;">
-    <div>
-      <h2 class="mb-0">Police Region Office Mirpur</h2>
-      <p class="mb-0">Employee's Family details for Computerized Medical Card</p>
+
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <!-- Logo left -->
+        <div class="logo" aria-hidden="true">
+          <!-- replace src with your logo filename hosted on GitHub pages -->
+          <img src="AJKPLogo.png" alt="AJK Police Logo">
+        </div>
+
+        <!-- Heading text centered visually -->
+        <div class="header-text">
+          <h1>Police Region Office Mirpur</h1>
+          <p class="lead mb-0">Employee's Family details for Computerized Medical Card</p>
+        </div>
+      </div>
     </div>
   </header>
 
-  <main class="container py-4">
+  <main class="container">
 
-    <!-- Employee Form -->
-    <form id="employeeForm" class="card p-3 shadow-sm mb-4">
-      <h5 class="mb-3 text-primary">Employee Information</h5>
-
-      <div class="mb-3">
-        <label class="form-label">Posting Place *</label>
-        <select id="postingPlace" class="form-select" required>
-          <option value="">Select Posting Place</option>
-          <option value="Region Office">Region Office</option>
-          <option value="Mirpur">District Mirpur</option>
-          <option value="Kotli">District Kotli</option>
-          <option value="Bhimber">District Bhimber</option>
-        </select>
+    <!-- Employee card -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0"><i class="fas fa-user me-2"></i>Employee Information</h5>
       </div>
+      <div class="card-body">
+        <form id="personalForm">
+          <div class="mb-3">
+            <label for="postingPlace" class="form-label required">Posting Place</label>
+            <select class="form-select" id="postingPlace" required>
+              <option value="" selected disabled>Select Posting Place</option>
+              <option value="Region Office">Region Office</option>
+              <option value="Mirpur">District Mirpur</option>
+              <option value="Kotli">District Kotli</option>
+              <option value="Bhimber">District Bhimber</option>
+            </select>
+          </div>
 
-      <div class="mb-3">
-        <label class="form-label">Full Name *</label>
-        <input type="text" id="fullName" class="form-control" required>
-      </div>
+          <div class="mb-3">
+            <label for="fullName" class="form-label required">Full Name</label>
+            <input type="text" id="fullName" class="form-control" placeholder="Enter your full name" required>
+          </div>
 
-      <div class="mb-3">
-        <label class="form-label">Designation *</label>
-        <select id="designation" class="form-select" required>
-          <option value="">Select Designation</option>
-          <option>AD</option>
-          <option>Head Clerk</option>
-          <option>Steno</option>
-          <option>Senior Clerk</option>
-          <option>Junior Clerk</option>
-          <option>Naib Qasid</option>
-          <option>DSP</option>
-          <option>ASP</option>
-          <option>Insp</option>
-          <option>PI</option>
-          <option>SI</option>
-          <option>ASI</option>
-          <option>HC</option>
-          <option>FC</option>
-          <option>Fowler</option>
-        </select>
-      </div>
+          <div class="mb-3">
+            <label for="designation" class="form-label required">Designation</label>
+            <select id="designation" class="form-select" required>
+              <option value="" selected disabled>Select Designation</option>
+              <option>SC</option>
+              <option>ASI</option>
+              <option>FC-56</option>
+              <option>Other</option>
+            </select>
+          </div>
 
-      <div class="mb-3">
-        <label class="form-label">Employee CNIC *</label>
-        <input type="text" id="employeeCnic" class="form-control" maxlength="13" pattern="[0-9]{13}" required>
-      </div>
+          <div class="mb-3">
+            <label for="employeeCnic" class="form-label required">Employee CNIC</label>
+            <input type="text" id="employeeCnic" class="form-control cnic-input" maxlength="13" pattern="[0-9]{13}" title="13 digits, no hyphens" required>
+            <div class="form-text">Enter without hyphens (e.g., 1234567890123)</div>
+          </div>
 
-      <div class="mb-3">
-        <label class="form-label">Email *</label>
-        <input type="email" id="email" class="form-control" required>
-      </div>
+          <div class="mb-3">
+            <label for="email" class="form-label required">Email</label>
+            <input type="email" id="email" class="form-control" required>
+          </div>
 
-      <div class="mb-3">
-        <label class="form-label">Mobile *</label>
-        <input type="text" id="mobile" class="form-control" required>
-      </div>
+          <div class="mb-3">
+            <label for="mobile" class="form-label required">Mobile Number</label>
+            <input type="text" id="mobile" class="form-control" required>
+          </div>
 
-      <div class="mb-3">
-        <label class="form-label">Blood Group</label>
-        <input type="text" id="bloodGroup" class="form-control">
-      </div>
+          <div class="mb-3">
+            <label for="bloodGroup" class="form-label">Blood Group</label>
+            <select id="bloodGroup" class="form-select">
+              <option value="">Select Blood Group</option>
+              <option>A+</option><option>A-</option>
+              <option>B+</option><option>B-</option>
+              <option>O+</option><option>O-</option>
+              <option>AB+</option><option>AB-</option>
+            </select>
+          </div>
 
-      <button type="button" id="addFamilyBtn" class="btn btn-primary">Add Family Member</button>
-    </form>
-
-    <!-- Family Form (hidden initially) -->
-    <form id="familyForm" class="card p-3 shadow-sm mb-4" style="display:none;">
-      <h5 class="mb-3 text-success">Family Member</h5>
-
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Relationship *</label>
-          <select id="relationship" class="form-select" required>
-            <option value="">Select</option>
-            <option value="Father">Father</option>
-            <option value="Mother">Mother</option>
-            <option value="Wife">Wife</option>
-            <option value="Husband">Husband</option>
-            <option value="Son">Son</option>
-            <option value="Daughter">Daughter</option>
-            <option value="Special Child">Special Child</option>
-          </select>
-        </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Full Name *</label>
-          <input type="text" id="familyName" class="form-control" required>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label class="form-label">CNIC *</label>
-          <input type="text" id="cnic" class="form-control" maxlength="13" pattern="[0-9]{13}" required>
-        </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Date of Birth *</label>
-          <input type="date" id="dob" class="form-control" required>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Marital Status *</label>
-          <select id="maritalStatus" class="form-select" required>
-            <option value="">Select</option>
-            <option value="Married">Married</option>
-            <option value="Unmarried">Unmarried</option>
-          </select>
-        </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Job Status *</label>
-          <select id="jobStatus" class="form-select" required>
-            <option value="">Select</option>
-            <option value="Employed">Employed</option>
-            <option value="Unemployed">Unemployed</option>
-          </select>
-        </div>
-      </div>
-
-      <button type="button" id="addNewRecordBtn" class="btn btn-success">Add Record</button>
-    </form>
-
-    <!-- Family Members Table -->
-    <div id="familyTableContainer" class="card p-3 shadow-sm mb-4" style="display:none;">
-      <h5 class="mb-3">Family Members <span class="badge bg-primary" id="familyCount">0</span></h5>
-      <div class="table-responsive">
-        <table class="table table-striped table-hover">
-          <thead class="table-dark">
-            <tr>
-              <th>#</th>
-              <th>Relationship</th>
-              <th>Name</th>
-              <th>CNIC</th>
-              <th>DOB</th>
-              <th>Marital Status</th>
-              <th>Job Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="familyMembers"></tbody>
-        </table>
+          <button type="button" class="btn btn-primary mt-2" id="addFamilyBtn">
+            <i class="fas fa-plus-circle me-2"></i>Add Family Member
+          </button>
+        </form>
       </div>
     </div>
 
-    <!-- Submit Button -->
-    <div id="submitContainer" class="text-center" style="display:none;">
-      <button type="button" id="submitToSheetsBtn" class="btn btn-danger btn-lg">Submit All Information</button>
-      <p id="statusText" class="mt-3 text-muted"></p>
+    <!-- Family form card (hidden initially) -->
+    <div class="card mb-4" id="familyFormContainer" style="display:none;">
+      <div class="card-header">
+        <h5 class="mb-0"><i class="fas fa-users me-2"></i>Add Family Member</h5>
+      </div>
+      <div class="card-body">
+        <form id="familyForm">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="relationship" class="form-label required">Relationship</label>
+              <select id="relationship" class="form-select" required>
+                <option value="" selected disabled>Select relationship</option>
+                <option value="Father">Father</option>
+                <option value="Mother">Mother</option>
+                <option value="Wife">Wife</option>
+                <option value="Husband">Husband</option>
+                <option value="Son">Son</option>
+                <option value="Daughter">Daughter</option>
+                <option value="Special Child">Special Child</option>
+              </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="familyName" class="form-label required">Full Name</label>
+              <input type="text" id="familyName" class="form-control" placeholder="Enter family member's name" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="cnic" class="form-label required">CNIC</label>
+              <input type="text" id="cnic" class="form-control cnic-input" maxlength="13" pattern="[0-9]{13}" title="13 digits, no hyphens" required>
+              <div class="form-text">Enter without hyphens (e.g., 1234567890123)</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="dob" class="form-label required">Date of Birth</label>
+              <input type="date" id="dob" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="maritalstatus" class="form-label required">Marital Status</label>
+              <select id="maritalstatus" class="form-select" required>
+                <option value="" selected disabled>Select Status</option>
+                <option value="Married">Married</option>
+                <option value="Unmarried">Unmarried</option>
+              </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="jobstatus" class="form-label required">Job Status</label>
+              <select id="jobstatus" class="form-select" required>
+                <option value="" selected disabled>Select Status</option>
+                <option value="Employed">Employed</option>
+                <option value="Unemployed">Unemployed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between mt-3">
+            <button type="button" class="btn btn-secondary" id="cancelFamilyBtn"><i class="fas fa-times me-2"></i>Cancel</button>
+            <button type="button" class="btn btn-success" id="addNewRecordBtn"><i class="fas fa-plus me-2"></i>Add New Record</button>
+          </div>
+        </form>
+      </div>
     </div>
 
+    <!-- Family members display -->
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="fas fa-list me-2"></i>Family Members</h5>
+        <span class="badge bg-primary rounded-pill" id="familyCount">0</span>
+      </div>
+      <div class="card-body">
+        <div id="noFamilyMessage" class="text-center p-4">
+          <i class="fas fa-users fa-3x mb-3 text-muted"></i>
+          <p class="text-muted mb-0">No family members added yet. Click 'Add Family Member' to get started.</p>
+        </div>
+
+        <div id="familyTableContainer" style="display:none;">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Relationship</th>
+                  <th>Name</th>
+                  <th>CNIC</th>
+                  <th>Date of Birth</th>
+                  <th>Marital Status</th>
+                  <th>Job Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="familyMembersTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="submit-container text-center mt-3" id="submitContainer" style="display:none;">
+          <button type="button" class="btn btn-google btn-lg" id="submitToSheetsBtn"><i class="fab fa-google me-2"></i>Submit All Information</button>
+          <div id="submitStatus" class="mt-3" style="display:none;">
+            <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+            <span id="statusText">Saving Data...</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="footer text-center py-3">
-    <p class="mb-1">© 2025 AJK Police Medical Card System | Developed by Umair Hussain</p>
-    <a href="https://wa.me/923455511415" target="_blank" class="btn btn-success">
-      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" style="height:20px; margin-right:5px;">
-      WhatsApp Me
-    </a>
+  <footer class="footer">
+    <div class="container">
+      <p class="mb-0">2025 © AJK Police Medical Card System. All rights reserved by "Fantasy Curator" — Umair Hussain (0345-5511415)</p>
+    </div>
   </footer>
 
+  <!-- fontawesome icons (used for header icons/buttons) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  <!-- main JS -->
   <script src="script.js"></script>
 </body>
 </html>
-
