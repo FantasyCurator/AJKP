@@ -1,199 +1,62 @@
-// Replace with your published Web App URL (deploy as "Anyone")
-const scriptURL = "https://script.google.com/macros/s/AKfycbxLI8ZpRNtKpM3nZ1rP7HiymT1FwgMdgaTu_qVcXp2AyOWRiSlv6_YUY3kqhHTSAYsW7w/exec";
-
-document.addEventListener('DOMContentLoaded', () => {
-  const addFamilyBtn = document.getElementById('addFamilyBtn');
-  const familyFormContainer = document.getElementById('familyFormContainer');
-  const cancelFamilyBtn = document.getElementById('cancelFamilyBtn');
-  const addNewRecordBtn = document.getElementById('addNewRecordBtn');
-  const submitToSheetsBtn = document.getElementById('submitToSheetsBtn');
-  const personalForm = document.getElementById('personalForm');
-  const familyForm = document.getElementById('familyForm');
-
-  const noFamilyMessage = document.getElementById('noFamilyMessage');
-  const familyTableContainer = document.getElementById('familyTableContainer');
-  const familyMembersTable = document.getElementById('familyMembersTable');
-  const familyCountBadge = document.getElementById('familyCount');
-  const submitContainer = document.getElementById('submitContainer');
-  const submitStatus = document.getElementById('submitStatus');
-  const statusText = document.getElementById('statusText');
+document.addEventListener("DOMContentLoaded", () => {
+  const employeeForm = document.getElementById("employeeForm");
+  const familyForm = document.getElementById("familyForm");
+  const familyTableBody = document.querySelector("#familyTable tbody");
 
   let familyMembers = [];
 
-  // Utility: validate CNIC (13 digits)
-  function validCNIC(s) {
-    return typeof s === 'string' && /^\d{13}$/.test(s);
-  }
-
-  // Add Family button - show family form only if employee form valid
-  addFamilyBtn.addEventListener('click', () => {
-    if (!personalForm.checkValidity()) {
-      personalForm.reportValidity();
-      return;
-    }
-    familyFormContainer.style.display = 'block';
-    familyForm.scrollIntoView({behavior:'smooth'});
-  });
-
-  // Cancel family entry
-  cancelFamilyBtn.addEventListener('click', () => {
-    familyForm.reset();
-    familyFormContainer.style.display = 'none';
-  });
-
-  // Add New Record
-  addNewRecordBtn.addEventListener('click', () => {
-    // Validate family form fields
-    const rel = document.getElementById('relationship').value;
-    const name = document.getElementById('familyName').value.trim();
-    const cnic = document.getElementById('cnic').value.trim();
-    const dob = document.getElementById('dob').value;
-    const marital = document.getElementById('maritalstatus').value;
-    const job = document.getElementById('jobstatus').value;
-
-    // Family CNIC must match CNIC format (13 digits)
-    if (!rel || !name || !cnic || !dob || !marital || !job) {
-      alert('Please complete all required family fields.');
-      return;
-    }
-    if (!validCNIC(cnic)) {
-      alert('Please enter valid 13-digit CNIC for family member (numbers only).');
-      return;
-    }
-    // Optionally: check family CNIC not same as employee? (not requested)
-    // push member
-    familyMembers.push({ relationship: rel, name, cnic, dob, marital, job });
-    renderFamilyMembers();
-
-    // Hide family form after adding (as requested)
-    familyForm.reset();
-    familyFormContainer.style.display = 'none';
-  });
-
-  // Render family members table
-  function renderFamilyMembers() {
-    if (!familyMembers.length) {
-      noFamilyMessage.style.display = 'block';
-      familyTableContainer.style.display = 'none';
-      familyMembersTable.innerHTML = '';
-      familyCountBadge.innerText = '0';
-      submitContainer.style.display = 'none';
-      return;
-    }
-
-    noFamilyMessage.style.display = 'none';
-    familyTableContainer.style.display = 'block';
-    submitContainer.style.display = 'block';
-    familyCountBadge.innerText = String(familyMembers.length);
-
-    let html = '';
-    familyMembers.forEach((m, idx) => {
-      html += `
-        <tr>
-          <td>${idx+1}</td>
-          <td>${escapeHtml(m.relationship)}</td>
-          <td>${escapeHtml(m.name)}</td>
-          <td>${formatCNIC(m.cnic)}</td>
-          <td>${m.dob}</td>
-          <td>${m.marital}</td>
-          <td>${m.job}</td>
-          <td>
-            <button class="btn btn-sm btn-outline-danger" data-action="delete" data-index="${idx}">Delete</button>
-          </td>
-        </tr>
-      `;
-    });
-    familyMembersTable.innerHTML = html;
-  }
-
-  // Helper: format CNIC 13->xxxxx-xxxxxxx-x
-  function formatCNIC(cnic) {
-    if (!/^\d{13}$/.test(cnic)) return cnic;
-    return cnic.replace(/(\d{5})(\d{7})(\d{1})/,'$1-$2-$3');
-  }
-
-  // Escape HTML to avoid injection
-  function escapeHtml(s){ return (s+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-  // Delegate click for delete buttons
-  familyMembersTable.addEventListener('click', (ev) => {
-    const btn = ev.target.closest('button[data-action="delete"]');
-    if (!btn) return;
-    const idx = Number(btn.dataset.index);
-    if (!isNaN(idx)) {
-      if (confirm('Remove this family member?')) {
-        familyMembers.splice(idx,1);
-        renderFamilyMembers();
-      }
-    }
-  });
-
-  // Submit all to Apps Script
-  submitToSheetsBtn.addEventListener('click', async () => {
-    // validate employee fields one more time
-    if (!personalForm.checkValidity()) {
-      personalForm.reportValidity();
-      return;
-    }
-    if (familyMembers.length === 0) {
-      alert('Please add at least one family member before submitting.');
-      return;
-    }
-
-    const employee = {
-      postingPlace: document.getElementById('postingPlace').value,
-      fullName: document.getElementById('fullName').value.trim(),
-      designation: document.getElementById('designation').value,
-      employeeCnic: document.getElementById('employeeCnic').value.trim(),
-      email: document.getElementById('email').value.trim(),
-      mobile: document.getElementById('mobile').value.trim(),
-      bloodGroup: document.getElementById('bloodGroup').value
+  // Employee save
+  employeeForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = {
+      type: "employee",
+      name: document.getElementById("empName").value,
+      cnic: document.getElementById("empCNIC").value,
+      designation: document.getElementById("designation").value
     };
 
-    if (!/^\d{13}$/.test(employee.employeeCnic)) {
-      alert('Please enter valid 13-digit Employee CNIC.');
-      return;
-    }
-
-    // Show spinner
-    submitStatus.style.display = 'block';
-    statusText.textContent = 'Saving to Google Sheets...';
-    submitToSheetsBtn.disabled = true;
-
-    try {
-      // Use URLSearchParams to avoid CORS preflight (no JSON content-type header)
-      const body = new URLSearchParams();
-      body.append('employee', JSON.stringify(employee));
-      body.append('familyMembers', JSON.stringify(familyMembers));
-
-      const res = await fetch(scriptURL, {
-        method: 'POST',
-        body: body
-      });
-
-      // response should be JSON from Apps Script
-      const data = await res.json();
-
-      if (data && (data.status === 'success' || data.result === 'success')) {
-        statusText.textContent = 'Data saved successfully!';
-        // reset forms & table
-        personalForm.reset();
-        familyMembers = [];
-        renderFamilyMembers();
-        familyForm.reset();
-        familyFormContainer.style.display = 'none';
-      } else {
-        const msg = (data && (data.message || data.error)) || 'Unknown error';
-        statusText.textContent = 'Error: ' + msg;
-      }
-    } catch (err) {
-      console.error(err);
-      statusText.textContent = 'Error: ' + (err.message || err);
-    } finally {
-      submitToSheetsBtn.disabled = false;
-      setTimeout(()=> submitStatus.style.display = 'none', 2000);
-    }
+    saveToServer(data);
+    employeeForm.reset();
   });
 
-}); // DOMContentLoaded
+  // Add family
+  familyForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const member = {
+      name: document.getElementById("famName").value,
+      relation: document.getElementById("relation").value
+    };
 
+    familyMembers.push(member);
+    renderFamilyTable();
+    familyForm.reset();
+  });
+
+  function renderFamilyTable() {
+    familyTableBody.innerHTML = "";
+    familyMembers.forEach((m, i) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${m.name}</td>
+        <td>${m.relation}</td>
+        <td><button onclick="deleteMember(${i})">Delete</button></td>
+      `;
+      familyTableBody.appendChild(row);
+    });
+  }
+
+  window.deleteMember = function(index) {
+    familyMembers.splice(index, 1);
+    renderFamilyTable();
+  };
+
+  function saveToServer(data) {
+    fetch("https://script.google.com/macros/s/AKfycbwNhurOuWXZGNvirFqp2VTbMFuEt956dSGvZXyvlN-fDKcL2R-mVd3_Om8o_HmBFzSTXw/exec", {
+      method: "POST",
+      body: JSON.stringify(data)
+    })
+    .then(res => res.text())
+    .then(msg => console.log(msg))
+    .catch(err => console.error("Error:", err));
+  }
+});
