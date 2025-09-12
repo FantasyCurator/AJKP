@@ -1,4 +1,4 @@
-const scriptURL = "https://script.google.com/macros/s/AKfycbzkwPxIQmIwmqTi5H2VwY-mN4hwKXLEdxLiJxQFVxBn_4rJX0Zui5-zem9OBixaGcv1kA/exec"; // Replace with your Web App URL
+const scriptURL = "https://script.google.com/macros/s/AKfycbxtnSolIvg-wu32WUij8mH4-LgrSUJTJb_fgJoNlI3Kb87uTlzjIez5x-vKAjvU_O-7/exec"; // Replace with your Web App URL
 let familyMembers = [];
 
 // Show Family Form after Employee data
@@ -31,7 +31,7 @@ document.getElementById("addNewRecordBtn").addEventListener("click", () => {
   document.getElementById("familyForm").style.display = "none";
 });
 
-// Update Family Table
+// Update Family Table with Delete buttons
 function updateFamilyTable() {
   const tbody = document.getElementById("familyMembers");
   tbody.innerHTML = "";
@@ -45,6 +45,9 @@ function updateFamilyTable() {
       <td>${member.dob}</td>
       <td>${member.maritalStatus}</td>
       <td>${member.jobStatus}</td>
+      <td>
+        <button class="btn btn-sm btn-danger" onclick="deleteFamily(${index})">Delete</button>
+      </td>
     </tr>`;
     tbody.insertAdjacentHTML("beforeend", row);
   });
@@ -52,6 +55,12 @@ function updateFamilyTable() {
   document.getElementById("familyCount").textContent = familyMembers.length;
   document.getElementById("familyTableContainer").style.display = "block";
   document.getElementById("submitContainer").style.display = "block";
+}
+
+// Delete family member by index
+function deleteFamily(index) {
+  familyMembers.splice(index, 1);
+  updateFamilyTable();
 }
 
 // Submit All Data
