@@ -1,98 +1,90 @@
-const scriptURL = "https://script.google.com/macros/s/AKfycbxtnSolIvg-wu32WUij8mH4-LgrSUJTJb_fgJoNlI3Kb87uTlzjIez5x-vKAjvU_O-7/exec"; // Replace with your Web App URL
-let familyMembers = [];
+const familyMembers = [];
 
-// Show Family Form after Employee data
 document.getElementById("addFamilyBtn").addEventListener("click", () => {
-  if (document.getElementById("employeeForm").checkValidity()) {
-    document.getElementById("familyForm").style.display = "block";
-  } else {
-    alert("Please complete Employee Information first.");
-  }
+  document.getElementById("familyFormSection").classList.remove("hidden");
 });
 
-// Add Family Member to table
-document.getElementById("addNewRecordBtn").addEventListener("click", () => {
-  const relationship = document.getElementById("relationship").value;
-  const name = document.getElementById("familyName").value;
-  const cnic = document.getElementById("cnic").value;
-  const dob = document.getElementById("dob").value;
-  const maritalStatus = document.getElementById("maritalStatus").value;
-  const jobStatus = document.getElementById("jobStatus").value;
+document.getElementById("saveFamilyBtn").addEventListener("click", () => {
+  const form = document.getElementById("familyForm");
+  const member = {
+    relationship: form.relationship.value,
+    name: form.name.value,
+    cnic: form.cnic.value,
+    dob: form.dob.value,
+    maritalStatus: form.maritalStatus.value,
+    jobStatus: form.jobStatus.value
+  };
 
-  if (!relationship || !name || !cnic || !dob || !maritalStatus || !jobStatus) {
-    alert("Please fill all Family Member fields.");
+  // Validation
+  if (!member.relationship || !member.name || !member.cnic || !member.dob || !member.maritalStatus || !member.jobStatus) {
+    alert("Please fill all family fields.");
     return;
   }
 
-  familyMembers.push({ relationship, name, cnic, dob, maritalStatus, jobStatus });
-  updateFamilyTable();
-
-  document.getElementById("familyForm").reset();
-  document.getElementById("familyForm").style.display = "none";
+  familyMembers.push(member);
+  form.reset();
+  renderFamilyTable();
+  document.getElementById("submitSection").classList.remove("hidden");
 });
 
-// Update Family Table with Delete buttons
-function updateFamilyTable() {
-  const tbody = document.getElementById("familyMembers");
+function renderFamilyTable() {
+  const tbody = document.querySelector("#familyTable tbody");
   tbody.innerHTML = "";
-
-  familyMembers.forEach((member, index) => {
+  familyMembers.forEach((m, i) => {
     const row = `<tr>
-      <td>${index + 1}</td>
-      <td>${member.relationship}</td>
-      <td>${member.name}</td>
-      <td>${member.cnic}</td>
-      <td>${member.dob}</td>
-      <td>${member.maritalStatus}</td>
-      <td>${member.jobStatus}</td>
-      <td>
-        <button class="btn btn-sm btn-danger" onclick="deleteFamily(${index})">Delete</button>
-      </td>
+      <td>${i + 1}</td>
+      <td>${m.relationship}</td>
+      <td>${m.name}</td>
+      <td>${m.cnic}</td>
+      <td>${m.dob}</td>
+      <td>${m.maritalStatus}</td>
+      <td>${m.jobStatus}</td>
+      <td><button onclick="deleteFamily(${i})">Delete</button></td>
     </tr>`;
     tbody.insertAdjacentHTML("beforeend", row);
   });
-
-  document.getElementById("familyCount").textContent = familyMembers.length;
-  document.getElementById("familyTableContainer").style.display = "block";
-  document.getElementById("submitContainer").style.display = "block";
 }
 
-// Delete family member by index
 function deleteFamily(index) {
   familyMembers.splice(index, 1);
-  updateFamilyTable();
+  renderFamilyTable();
 }
 
-// Submit All Data
-document.getElementById("submitToSheetsBtn").addEventListener("click", () => {
+document.getElementById("submitBtn").addEventListener("click", () => {
+  const empForm = document.getElementById("employeeForm");
   const employee = {
-    postingPlace: document.getElementById("postingPlace").value,
-    fullName: document.getElementById("fullName").value,
-    designation: document.getElementById("designation").value,
-    employeeCnic: document.getElementById("employeeCnic").value,
-    email: document.getElementById("email").value,
-    mobile: document.getElementById("mobile").value,
-    bloodGroup: document.getElementById("bloodGroup").value
+    postingPlace: empForm.postingPlace.value,
+    fullName: empForm.fullName.value,
+    designation: empForm.designation.value,
+    employeeCnic: empForm.employeeCnic.value,
+    email: empForm.email.value,
+    mobile: empForm.mobile.value,
+    bloodGroup: empForm.bloodGroup.value
   };
 
-  document.getElementById("statusText").textContent = "Saving data...";
+  if (!employee.postingPlace || !employee.fullName || !employee.designation || !employee.employeeCnic) {
+    alert("Please fill all required employee fields.");
+    return;
+  }
 
-  fetch(scriptURL, {
+  fetch("https://script.google.com/macros/s/AKfycbw2ay-vMgynl-yhxt88gqnyrUS875wlf_EjNkLNIPXuqLCvIjjh2F9K_zYGlHQoaLaZPw/exec", {
     method: "POST",
-    body: new URLSearchParams({
-      employee: JSON.stringify(employee),
-      familyMembers: JSON.stringify(familyMembers)
-    })
+    body: JSON.stringify({ employee, familyMembers }),
+    headers: { "Content-Type": "application/json" }
   })
     .then(res => res.json())
-    .then(() => {
-      document.getElementById("statusText").textContent = "Data saved successfully!";
-      document.getElementById("employeeForm").reset();
-      familyMembers = [];
-      updateFamilyTable();
-      document.getElementById("submitContainer").style.display = "none";
+    .then(data => {
+      document.getElementById("formMessage").innerText =
+        data.status === "success" ? "Data saved successfully!" : "Error: " + data.message;
+      if (data.status === "success") {
+        empForm.reset();
+        familyMembers.length = 0;
+        renderFamilyTable();
+        document.getElementById("familyFormSection").classList.add("hidden");
+        document.getElementById("submitSection").classList.add("hidden");
+      }
     })
     .catch(err => {
-      document.getElementById("statusText").textContent = "Error: " + err.message;
+      document.getElementById("formMessage").innerText = "Error: " + err.message;
     });
 });
