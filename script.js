@@ -209,13 +209,8 @@ document.querySelectorAll('input[name="empType"]').forEach(radio => {
       const data = await res.json();
 
       if (data && (data.status === 'success' || data.result === 'success')) {
-        statusText.textContent = 'Data saved successfully!';
-        // reset forms & table
-        personalForm.reset();
-        familyMembers = [];
-        renderFamilyMembers();
-        familyForm.reset();
-        familyFormContainer.style.display = 'none';
+        // Redirect to bye.html after success
+        window.location.href = "bye.html";
       } else {
         const msg = (data && (data.message || data.error)) || 'Unknown error';
         statusText.textContent = 'Error: ' + msg;
@@ -230,5 +225,6 @@ document.querySelectorAll('input[name="empType"]').forEach(radio => {
   });
 
 }); // DOMContentLoaded
+
 
 
