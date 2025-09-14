@@ -55,6 +55,32 @@
       .header-content { flex-direction:column; gap:10px; }
       .logo { margin-left:0; }
     }
+    .btn-upload {
+      background: #25D366; /* WhatsApp green type */
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+    .btn-upload:hover {
+      background: #1ebe5d;
+      transform: translateY(-2px);
+    }
+    .btn-upload:active {
+      transform: translateY(1px);
+    }
+    .btn-upload svg {
+      width: 22px;
+      height: 22px;
+      fill: white;
+    }
   </style>
 </head>
 <body>
@@ -288,6 +314,7 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
