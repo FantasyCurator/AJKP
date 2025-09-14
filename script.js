@@ -128,6 +128,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+const designationSelect = document.getElementById('designation');
+
+// Options list
+const ministerialOptions = ["Head Clerk", "Steno", "Senior Clerk", "Junior Clerk", "Naib Qasid"];
+const executiveOptions = ["INSP", "PI", "SI", "ASI", "HC", "FC", "Follower"];
+
+// Function to load options
+function loadOptions(options) {
+  // Reset dropdown
+  designationSelect.innerHTML = '<option value="">Select Designation</option>';
+
+  // Add new options
+  options.forEach(opt => {
+    const option = document.createElement('option');
+    option.value = opt;
+    option.textContent = opt;
+    designationSelect.appendChild(option);
+  });
+
+  // Enable dropdown
+  designationSelect.disabled = false;
+}
+
+// Event listener on radio buttons
+document.querySelectorAll('input[name="empType"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    if (radio.value === "Ministerial") {
+      loadOptions(ministerialOptions);
+    } else if (radio.value === "Executive") {
+      loadOptions(executiveOptions);
+    }
+  });
+});
+  
   // Submit all to Apps Script
   submitToSheetsBtn.addEventListener('click', async () => {
     // validate employee fields one more time
@@ -196,4 +230,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 }); // DOMContentLoaded
+
 
