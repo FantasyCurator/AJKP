@@ -209,8 +209,8 @@ document.querySelectorAll('input[name="empType"]').forEach(radio => {
       const data = await res.json();
 
       if (data && (data.status === 'success' || data.result === 'success')) {
-        // Redirect to bye.html after success
-        window.location.href = "bye.html";
+        // Redirect to plans.html after success
+        window.location.href = "plans.html";
       } else {
         const msg = (data && (data.message || data.error)) || 'Unknown error';
         statusText.textContent = 'Error: ' + msg;
@@ -225,6 +225,7 @@ document.querySelectorAll('input[name="empType"]').forEach(radio => {
   });
 
 }); // DOMContentLoaded
+
 
 
 
