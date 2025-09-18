@@ -105,18 +105,19 @@
 <div class="mb-3">
   <label class="form-label required">Employee Category</label><br>
 
-  <!-- Radio Buttons (none selected by default) -->
-  <input type="radio" name="empType" id="ministerial" value="Ministerial">
+  <!-- Radio Buttons (required added) -->
+  <input type="radio" name="empType" id="ministerial" value="Ministerial" required>
   <label for="ministerial">Ministerial Staff</label>
 
   <input type="radio" name="empType" id="executive" value="Executive" class="ms-3">
   <label for="executive">Executive Staff</label><br>
 
   <!-- Single Dropdown -->
-  <select id="designation" class="form-select mt-3" disabled>
+  <select id="designation" class="form-select mt-3" disabled required>
     <option value="">Select Designation</option>
   </select>
 </div>
+
 
           <div class="mb-3">
             <label for="employeeCnic" class="form-label required">Employee CNIC</label>
@@ -277,6 +278,7 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
