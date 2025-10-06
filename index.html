@@ -21,6 +21,7 @@
       padding: 40px;
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 25px;
     }
     h1 {
       font-weight: 700;
@@ -31,21 +32,48 @@
       color: #495057;
       line-height: 1.8;
     }
-    .btn-custom {
-      min-width: 180px;
-      padding: 12px 20px;
-      font-size: 1.1rem;
-      font-weight: 500;
-      border-radius: 50px;
-      transition: all 0.3s ease;
-    }
+  .btn-custom {
+  min-width: 180px;
+  padding: 12px 20px;   /* height چھوٹی کرنے کے لئے */
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  white-space: normal;
+  line-height: 2.5;    /* text اوپر balance ہوگا */
+}
+
+
     .btn-custom:hover {
       transform: translateY(-3px);
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
+    .upload-box {
+      background: #ffffff;
+      border: 1px solid #dee2e6;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .upload-box h5 {
+      color: #198754;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    /* 👇 Hand animation */
+    .hand-animate img {
+      width: 55px;
+      height: auto;
+      filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));
+      animation: bounce 1.2s infinite ease-in-out;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(12px); }
+    }
   </style>
 </head>
-<body class="d-flex justify-content-center align-items-center vh-100">
+<body class="d-flex justify-content-center align-items-center py-4">
 
   <div class="container text-center">
     <div class="welcome-section mx-auto col-md-8 col-lg-6">
@@ -56,19 +84,51 @@
       <h1 class="mb-3">خوش آمدید</h1>
 
       <!-- Intro Text -->
-      <p class="lead mb-4">
-        السلام علیکم۔ مرکزی دفتر پولیس مظفرآباد پولیس ملازمان کے کمپیوٹرائزڈ سروس کارڈ و میڈیل کارڈ کا اجرا کرنے جا رہا ہے۔ جس کےلئے کچھ بنیادی معلومات درکار ہیں۔
-        نیچھے دو بٹن ہیں ایک آپ کی تصویر اپلوڈ کرنے کا اور دوسرا مطلوبہ ریکارڈ اندراج کا۔ پہلے فارم فل کر لیں پھر دوبارہ لنک اوپن کر کے تصویر اپ لوڈ کریں۔ 
-        رہمنائی کےلئے رابطہ کریں۔ شکریہ
+      <p class="lead mb-2">
+        پولیس ملازمان کے کمپیوٹرائزڈ سروس کارڈ و میڈیکل کارڈ کے اجرا کےلئے کچھ بنیادی معلومات درکار ہیں۔
+        ریکارڈ کے اندراج کےلئے کلک کریں۔ 
       </p>
 
-      <!-- Buttons Row -->
-      <div class="d-flex justify-content-center gap-3">
-        <a href="form.html" class="btn btn-primary btn-custom">Data Entry Form</a>
-        <a href="https://docs.google.com/forms/d/your-google-form-id/viewform" target="_blank" class="btn btn-success btn-custom">Upload Picture</a>
+      <!-- 👇 Animated Hand (from GitHub PNG) -->
+      <div class="hand-animate mb-2">
+        <img src="hand.png" alt="Down Hand">
       </div>
+
+      <!-- Data Entry Button -->
+      <div class="mb-4">
+        <a href="form.html" class="btn btn-primary btn-custom"><b>Data Entry Form</b></a>
+      </div>
+
+      <!-- Upload Section -->
+      <div class="upload-box">
+        <h5>تصویر اپڈیٹ کرنے کے لئے</h5>
+        <div class="mb-3">
+          <select id="postingSelect" class="form-select">
+            <option value="">Select Posting Place</option>
+            <option value="https://docs.google.com/forms/d/e/1FAIpQLScr3MKJlxbNkfQZu-3umqXoJqx2G287OS-J0kylqn6rRTYEDg/viewform">Region Office</option>
+            <option value="https://docs.google.com/forms/d/e/1FAIpQLSdYXAtlVNGorvmRtge_7JGM3V0S8vlLcozVpKMnb8gN9_l7MA/viewform">District Mirpur</option>
+            <option value="https://docs.google.com/forms/d/e/1FAIpQLSe6xKSjTsAi3xq7IYVl_q1Vxy3BDJB4IiSiRpJLUzDKpAg36Q/viewform">District Kotli</option>
+            <option value="https://docs.google.com/forms/d/e/1FAIpQLSe40QArWeGbywW-eR1zgcVp5KG_ssuaFJVgakcz08aGUQj-jA/viewform">District Bhimber</option>
+          </select>
+        </div>
+        <button onclick="openForm()" class="btn btn-success btn-custom w-100">
+          Upload Picture
+        </button>
+      </div>
+
     </div>
   </div>
+
+  <script>
+    function openForm() {
+      const link = document.getElementById("postingSelect").value;
+      if (link) {
+        window.open(link, "_blank");
+      } else {
+        alert("Please select a Posting Place first.");
+      }
+    }
+  </script>
 
 </body>
 </html>
