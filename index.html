@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AJK Interactive Map</title>
+<style>
+  body {
+    margin: 0;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .map-container {
+    position: relative;
+    max-width: 1024px;
+    width: 100%;
+  }
+
+  .map-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .region {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .map-area {
+    position: absolute;
+    cursor: pointer;
+  }
+
+  /* Hover Preview */
+  .map-area:hover ~ .region[data-region="mirpur"],
+  .map-area:hover[data-region="mirpur"] ~ .region[data-region="mirpur"] {
+    opacity: 1;
+  }
+  .map-area:hover ~ .region[data-region="poonch"],
+  .map-area:hover[data-region="poonch"] ~ .region[data-region="poonch"] {
+    opacity: 1;
+  }
+  .map-area:hover ~ .region[data-region="muzaffarabad"],
+  .map-area:hover[data-region="muzaffarabad"] ~ .region[data-region="muzaffarabad"] {
+    opacity: 1;
+  }
+</style>
+</head>
+<body>
+
+<div class="map-container">
+  <img src="AJK.jpg" alt="AJK Map">
+
+  <!-- Mirpur Clickable Area -->
+  <a class="map-area" data-region="mirpur"
+     href="https://fantasycurator.github.io/RegionMirpur"
+     style="top: 65%; left: 40%; width: 25%; height: 25%;"></a>
+
+  <!-- Poonch Clickable Area -->
+  <a class="map-area" data-region="poonch"
+     href="#"
+     style="top: 45%; left: 30%; width: 35%; height: 25%;"></a>
+
+  <!-- Muzaffarabad Clickable Area -->
+  <a class="map-area" data-region="muzaffarabad"
+     href="#"
+     style="top: 20%; left: 50%; width: 30%; height: 25%;"></a>
+
+  <!-- Region Overlays -->
+  <img src="Mirpur.jpg" class="region" data-region="mirpur" alt="Mirpur">
+  <img src="Poonch.jpg" class="region" data-region="poonch" alt="Poonch">
+  <img src="Muzaffarabad.jpg" class="region" data-region="muzaffarabad" alt="Muzaffarabad">
+</div>
+
+<script>
+  // Mobile Support: single tap = preview, double tap = open link
+  let lastTap = 0;
+  document.querySelectorAll('.map-area').forEach(area => {
+    area.addEventListener('touchend', (e) => {
+      const now = Date.now();
+      if (now - lastTap < 400) {
+        const link = area.getAttribute('href');
+        if (link && link !== '#') window.location.href = link;
+      } else {
+        const region = area.dataset.region;
+        document.querySelectorAll('.region').forEach(r => r.style.opacity = '0');
+        document.querySelector(`.region[data-region="${region}"]`).style.opacity = '1';
+      }
+      lastTap = now;
+      e.preventDefault();
+    });
+  });
+</script>
+
+</body>
+</html>
