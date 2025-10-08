@@ -3,42 +3,37 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>AJK Interactive Map — adjusted</title>
+<title>AJK Interactive Map — refined</title>
 <style>
   body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#eef4fb;font-family:Segoe UI,Arial}
   .frame{width:95%;max-width:1024px;box-shadow:0 12px 40px rgba(3,30,70,0.12);border-radius:8px;overflow:hidden;background:#fff}
-  .svg-wrap{position:relative;width:100%;padding-bottom:151.66%} /* keeps aspect ratio 1024x1553 */
+  .svg-wrap{position:relative;width:100%;padding-bottom:151.66%}
   svg{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
-  /* invisible hit areas */
   .hit{fill:transparent;stroke:none;pointer-events:all}
   .hit:hover{cursor:pointer}
   image{display:block;width:100%;height:100%}
-  /* focus style for keyboard users */
-  .hit:focus{outline:3px solid rgba(11,99,217,0.12);outline-offset:-3px}
 </style>
 </head>
 <body>
-  <div class="frame" role="main" aria-label="AJK interactive map">
+  <div class="frame">
     <div class="svg-wrap" id="svgWrap">
-      <svg id="mapSVG" viewBox="0 0 1024 1553" xmlns="http://www.w3.org/2000/svg" aria-labelledby="t">
-        <title id="t">AJK interactive map</title>
+      <svg id="mapSVG" viewBox="0 0 1024 1553" xmlns="http://www.w3.org/2000/svg">
+        <image id="baseImage" href="AJK.jpg" width="1024" height="1553"></image>
 
-        <!-- base image -->
-        <image id="baseImage" href="AJK.jpg" x="0" y="0" width="1024" height="1553" preserveAspectRatio="xMidYMid slice"></image>
-
-        <!-- Mirpur (adjusted, bottom area) -->
-        <polygon id="mirpurPoly" class="hit" tabindex="0"
-          points="80,1150 220,1250 320,1350 420,1450 520,1500 640,1525 720,1500 760,1470 780,1400 760,1350 700,1300 600,1250 480,1200 360,1180 260,1160 160,1140">
+        <!-- Mirpur enlarged 40px upward -->
+        <polygon id="mirpurPoly" class="hit"
+          points="80,1110 220,1210 320,1310 420,1410 520,1460 640,1485 720,1460 760,1430 780,1360 760,1310 700,1260 600,1210 480,1160 360,1140 260,1120 160,1100">
         </polygon>
 
-        <!-- Poonch (central, adjusted) -->
-        <polygon id="poonchPoly" class="hit" tabindex="0"
-          points="240,640 270,710 310,770 360,820 420,860 480,890 540,910 600,920 660,910 700,880 720,850 720,820 700,780 650,740 590,700 520,670 460,650 390,640 320,640">
+        <!-- Poonch extended 20px left -->
+        <polygon id="poonchPoly" class="hit"
+          points="220,640 250,710 300,770 350,820 410,860 470,890 530,910 590,920 650,910 690,880 710,850 710,820 690,780 640,740 580,700 510,670 450,650 380,640 300,640">
         </polygon>
 
-        <!-- Muzaffarabad (top-right, adjusted) -->
-        <polygon id="muzaffarabadPoly" class="hit" tabindex="0"
-          points="520,40 580,60 660,100 740,140 810,200 830,240 840,280 830,320 800,350 770,370 720,380 640,380 560,360 520,320 500,260 480,200 500,140 520,80">
+        <!-- Muzaffarabad extended left + downward -->
+        <polygon id="muzaffarabadPoly" class="hit"
+          points="480,40 540,60 620,100 700,140 780,200 810,240 820,280 810,320 780,350 750,370 700,380 620,380 540,360 500,320 480,260 460,200 480,140 500,80 
+                  460,80 440,100 420,140 420,180 420,240 440,300 460,340 460,380 460,420 480,440 500,460 540,480 600,500 640,500 700,480 740,460 760,420 760,380">
         </polygon>
       </svg>
     </div>
@@ -46,7 +41,6 @@
 
 <script>
 (function(){
-  // mapping polygon id -> preview image and link
   const regionData = {
     mirpurPoly: { img: 'Mirpur.jpg', link: 'https://fantasycurator.github.io/RegionMirpur', clickable: true },
     poonchPoly: { img: 'Poonch.jpg', link: '#', clickable: false },
@@ -54,68 +48,37 @@
   };
 
   const baseImage = document.getElementById('baseImage');
-  // Preload preview images
   Object.values(regionData).forEach(r=>{ const i=new Image(); i.src=r.img; });
 
-  // instant swap (no fade)
-  function swapTo(imgHref){
-    baseImage.setAttribute('href', imgHref);
-  }
-  function restoreBase(){
-    baseImage.setAttribute('href', 'AJK.jpg');
-  }
+  function swapTo(img){ baseImage.setAttribute('href', img); }
+  function restore(){ baseImage.setAttribute('href', 'AJK.jpg'); }
 
-  // attach handlers
-  Object.keys(regionData).forEach(polyId=>{
-    const poly = document.getElementById(polyId);
-    const info = regionData[polyId];
+  Object.keys(regionData).forEach(id=>{
+    const poly=document.getElementById(id);
+    const info=regionData[id];
 
-    // desktop hover -> preview
-    poly.addEventListener('mouseenter', ()=> swapTo(info.img));
-    poly.addEventListener('mouseleave', ()=> restoreBase());
-
-    // desktop click -> navigate only if clickable
-    poly.addEventListener('click', (ev)=>{
-      if(info.clickable){
-        window.location.href = info.link;
-      } else {
-        ev.preventDefault();
-      }
+    poly.addEventListener('mouseenter',()=>swapTo(info.img));
+    poly.addEventListener('mouseleave',restore);
+    poly.addEventListener('click',e=>{
+      if(info.clickable) window.location.href=info.link;
+      else e.preventDefault();
     });
 
-    // keyboard accessibility
-    poly.addEventListener('keydown', (ev)=>{
-      if(ev.key==='Enter' || ev.key===' '){
-        ev.preventDefault();
-        if(info.clickable) window.location.href = info.link;
+    let lastTap=0;
+    poly.addEventListener('touchstart',e=>{
+      e.preventDefault();
+      const now=Date.now();
+      const gap=now-lastTap;
+      swapTo(info.img);
+      if(gap>0&&gap<420&&info.clickable){
+        setTimeout(()=>window.location.href=info.link,120);
       }
-    });
-
-    // mobile touch: single tap shows preview, quick double-tap navigates if clickable
-    let lastTap = 0;
-    poly.addEventListener('touchstart', (ev)=>{
-      ev.preventDefault(); // avoid simulated mouse events
-      const now = Date.now();
-      const gap = now - lastTap;
-      swapTo(info.img); // preview
-      if(gap > 0 && gap < 420 && info.clickable){
-        // double-tap -> navigate (short delay to allow visual feedback)
-        setTimeout(()=> window.location.href = info.link, 120);
-      }
-      lastTap = now;
+      lastTap=now;
     });
   });
 
-  // clicking/tapping outside any polygon restores base
-  document.getElementById('mapSVG').addEventListener('pointerdown', (ev)=>{
-    if(!ev.target.classList || !ev.target.classList.contains('hit')){
-      restoreBase();
-    }
-  });
-
-  // also restore on touchstart outside
-  document.addEventListener('touchstart', (ev)=>{
-    if(!ev.target.closest('.hit')) setTimeout(restoreBase, 200);
+  document.getElementById('mapSVG').addEventListener('pointerdown',e=>{
+    if(!e.target.classList.contains('hit')) restore();
   });
 })();
 </script>
