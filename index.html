@@ -1,107 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AJK Interactive Map</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AJK Interactive Map — adjusted</title>
 <style>
-  body {
-    margin: 0;
-    background: #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-
-  .map-container {
-    position: relative;
-    max-width: 1024px;
-    width: 100%;
-  }
-
-  .map-container img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  .region {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-  }
-
-  .map-area {
-    position: absolute;
-    cursor: pointer;
-  }
-
-  /* Hover Preview */
-  .map-area:hover ~ .region[data-region="mirpur"],
-  .map-area:hover[data-region="mirpur"] ~ .region[data-region="mirpur"] {
-    opacity: 1;
-  }
-  .map-area:hover ~ .region[data-region="poonch"],
-  .map-area:hover[data-region="poonch"] ~ .region[data-region="poonch"] {
-    opacity: 1;
-  }
-  .map-area:hover ~ .region[data-region="muzaffarabad"],
-  .map-area:hover[data-region="muzaffarabad"] ~ .region[data-region="muzaffarabad"] {
-    opacity: 1;
-  }
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#eef4fb;font-family:Segoe UI,Arial}
+  .frame{width:95%;max-width:1024px;box-shadow:0 12px 40px rgba(3,30,70,0.12);border-radius:8px;overflow:hidden;background:#fff}
+  .svg-wrap{position:relative;width:100%;padding-bottom:151.66%} /* keeps aspect ratio 1024x1553 */
+  svg{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
+  /* invisible hit areas */
+  .hit{fill:transparent;stroke:none;pointer-events:all}
+  .hit:hover{cursor:pointer}
+  image{display:block;width:100%;height:100%}
+  /* focus style for keyboard users */
+  .hit:focus{outline:3px solid rgba(11,99,217,0.12);outline-offset:-3px}
 </style>
 </head>
 <body>
+  <div class="frame" role="main" aria-label="AJK interactive map">
+    <div class="svg-wrap" id="svgWrap">
+      <svg id="mapSVG" viewBox="0 0 1024 1553" xmlns="http://www.w3.org/2000/svg" aria-labelledby="t">
+        <title id="t">AJK interactive map</title>
 
-<div class="map-container">
-  <img src="AJK.jpg" alt="AJK Map">
+        <!-- base image -->
+        <image id="baseImage" href="AJK.jpg" x="0" y="0" width="1024" height="1553" preserveAspectRatio="xMidYMid slice"></image>
 
-  <!-- Mirpur Clickable Area -->
-  <a class="map-area" data-region="mirpur"
-     href="https://fantasycurator.github.io/RegionMirpur"
-     style="top: 65%; left: 40%; width: 25%; height: 25%;"></a>
+        <!-- Mirpur (adjusted, bottom area) -->
+        <polygon id="mirpurPoly" class="hit" tabindex="0"
+          points="80,1150 220,1250 320,1350 420,1450 520,1500 640,1525 720,1500 760,1470 780,1400 760,1350 700,1300 600,1250 480,1200 360,1180 260,1160 160,1140">
+        </polygon>
 
-  <!-- Poonch Clickable Area -->
-  <a class="map-area" data-region="poonch"
-     href="#"
-     style="top: 45%; left: 30%; width: 35%; height: 25%;"></a>
+        <!-- Poonch (central, adjusted) -->
+        <polygon id="poonchPoly" class="hit" tabindex="0"
+          points="240,640 270,710 310,770 360,820 420,860 480,890 540,910 600,920 660,910 700,880 720,850 720,820 700,780 650,740 590,700 520,670 460,650 390,640 320,640">
+        </polygon>
 
-  <!-- Muzaffarabad Clickable Area -->
-  <a class="map-area" data-region="muzaffarabad"
-     href="#"
-     style="top: 20%; left: 50%; width: 30%; height: 25%;"></a>
-
-  <!-- Region Overlays -->
-  <img src="Mirpur.jpg" class="region" data-region="mirpur" alt="Mirpur">
-  <img src="Poonch.jpg" class="region" data-region="poonch" alt="Poonch">
-  <img src="Muzaffarabad.jpg" class="region" data-region="muzaffarabad" alt="Muzaffarabad">
-</div>
+        <!-- Muzaffarabad (top-right, adjusted) -->
+        <polygon id="muzaffarabadPoly" class="hit" tabindex="0"
+          points="520,40 580,60 660,100 740,140 810,200 830,240 840,280 830,320 800,350 770,370 720,380 640,380 560,360 520,320 500,260 480,200 500,140 520,80">
+        </polygon>
+      </svg>
+    </div>
+  </div>
 
 <script>
-  // Mobile Support: single tap = preview, double tap = open link
-  let lastTap = 0;
-  document.querySelectorAll('.map-area').forEach(area => {
-    area.addEventListener('touchend', (e) => {
-      const now = Date.now();
-      if (now - lastTap < 400) {
-        const link = area.getAttribute('href');
-        if (link && link !== '#') window.location.href = link;
+(function(){
+  // mapping polygon id -> preview image and link
+  const regionData = {
+    mirpurPoly: { img: 'Mirpur.jpg', link: 'https://fantasycurator.github.io/RegionMirpur', clickable: true },
+    poonchPoly: { img: 'Poonch.jpg', link: '#', clickable: false },
+    muzaffarabadPoly: { img: 'Muzaffarabad.jpg', link: '#', clickable: false }
+  };
+
+  const baseImage = document.getElementById('baseImage');
+  // Preload preview images
+  Object.values(regionData).forEach(r=>{ const i=new Image(); i.src=r.img; });
+
+  // instant swap (no fade)
+  function swapTo(imgHref){
+    baseImage.setAttribute('href', imgHref);
+  }
+  function restoreBase(){
+    baseImage.setAttribute('href', 'AJK.jpg');
+  }
+
+  // attach handlers
+  Object.keys(regionData).forEach(polyId=>{
+    const poly = document.getElementById(polyId);
+    const info = regionData[polyId];
+
+    // desktop hover -> preview
+    poly.addEventListener('mouseenter', ()=> swapTo(info.img));
+    poly.addEventListener('mouseleave', ()=> restoreBase());
+
+    // desktop click -> navigate only if clickable
+    poly.addEventListener('click', (ev)=>{
+      if(info.clickable){
+        window.location.href = info.link;
       } else {
-        const region = area.dataset.region;
-        document.querySelectorAll('.region').forEach(r => r.style.opacity = '0');
-        document.querySelector(`.region[data-region="${region}"]`).style.opacity = '1';
+        ev.preventDefault();
+      }
+    });
+
+    // keyboard accessibility
+    poly.addEventListener('keydown', (ev)=>{
+      if(ev.key==='Enter' || ev.key===' '){
+        ev.preventDefault();
+        if(info.clickable) window.location.href = info.link;
+      }
+    });
+
+    // mobile touch: single tap shows preview, quick double-tap navigates if clickable
+    let lastTap = 0;
+    poly.addEventListener('touchstart', (ev)=>{
+      ev.preventDefault(); // avoid simulated mouse events
+      const now = Date.now();
+      const gap = now - lastTap;
+      swapTo(info.img); // preview
+      if(gap > 0 && gap < 420 && info.clickable){
+        // double-tap -> navigate (short delay to allow visual feedback)
+        setTimeout(()=> window.location.href = info.link, 120);
       }
       lastTap = now;
-      e.preventDefault();
     });
   });
-</script>
 
+  // clicking/tapping outside any polygon restores base
+  document.getElementById('mapSVG').addEventListener('pointerdown', (ev)=>{
+    if(!ev.target.classList || !ev.target.classList.contains('hit')){
+      restoreBase();
+    }
+  });
+
+  // also restore on touchstart outside
+  document.addEventListener('touchstart', (ev)=>{
+    if(!ev.target.closest('.hit')) setTimeout(restoreBase, 200);
+  });
+})();
+</script>
 </body>
 </html>
