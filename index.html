@@ -6,7 +6,7 @@
   <title>AJK Interactive Map</title>
   <style>
     body {
-      background-color: #111;
+      background-color: #000;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -16,72 +16,84 @@
 
     .map-container {
       position: relative;
-      max-width: 1024px;
+      width: 1024px;
+      max-width: 100%;
     }
 
     img {
       width: 100%;
       height: auto;
       display: block;
-    }
-
-    /* Region highlight overlays */
-    .highlight {
-      position: absolute;
-      background-color: rgba(0, 255, 100, 0.35);
-      pointer-events: none;
-      mix-blend-mode: multiply;
-      display: none;
-      transition: none;
+      border-radius: 10px;
+      transition: opacity 0.3s ease;
     }
   </style>
 </head>
 <body>
   <div class="map-container">
-    <img src="1 AJK.jpg" usemap="#image-map" id="ajk-map" alt="AJK Map">
+    <img id="main-map" src="AJK.jpg" usemap="#ajkmap" alt="AJK Map">
 
-    <!-- Hover overlays -->
-    <div id="hover-Muzaffarabad" class="highlight"></div>
-    <div id="hover-Poonch" class="highlight"></div>
-    <div id="hover-Mirpur" class="highlight"></div>
-
-    <map name="image-map">
-      <area alt="Muzaffarabad" title="Muzaffarabad" coords="536,61,516,72,508,113,492,186,332,260,295,309,292,372,189,369,159,499,195,553,209,646,230,633,243,653,267,674,319,672,341,662,377,672,427,700,488,556,355,469,623,247,764,268,832,317,905,315,971,245,845,218,802,185,757,181,765,124,694,49,665,84,603,92" shape="poly">
-      <area alt="Poonch" title="Poonch" coords="205,667,209,716,242,782,242,843,253,913,290,945,322,963,365,954,391,964,419,957,451,956,461,884,483,832,535,836,596,807,625,772,608,719,550,694,451,727,431,717,414,723,368,691,294,696,260,692,223,660" shape="poly">
-      <area alt="Mirpur" title="Mirpur" coords="246,933,268,984,267,1053,255,1142,298,1233,291,1287,330,1303,392,1350,454,1352,486,1389,543,1408,568,1407,601,1442,622,1444,651,1476,712,1474,681,1323,595,1296,548,1245,479,1207,484,1183,528,1158,556,1121,564,1076,551,1017,516,979,465,982,413,974,382,989,366,971,339,971,337,996,295,962" shape="poly">
+    <map name="ajkmap">
+      <area alt="Muzaffarabad" title="Muzaffarabad"
+        href="#"
+        coords="536,61,516,72,508,113,492,186,332,260,295,309,292,372,189,369,159,499,195,553,209,646,230,633,243,653,267,674,319,672,341,662,377,672,427,700,488,556,355,469,623,247,764,268,832,317,905,315,971,245,845,218,802,185,757,181,765,124,694,49,665,84,603,92"
+        shape="poly">
+      <area alt="Poonch" title="Poonch"
+        href="#"
+        coords="205,667,209,716,242,782,242,843,253,913,290,945,322,963,365,954,391,964,419,957,451,956,461,884,483,832,535,836,596,807,625,772,608,719,550,694,451,727,431,717,414,723,368,691,294,696,260,692,223,660"
+        shape="poly">
+      <area alt="Mirpur" title="Mirpur"
+        href="https://fantasycurator.github.io/RegionMirpur"
+        coords="246,933,268,984,267,1053,255,1142,298,1233,291,1287,330,1303,392,1350,454,1352,486,1389,543,1408,568,1407,601,1442,622,1444,651,1476,712,1474,681,1323,595,1296,548,1245,479,1207,484,1183,528,1158,556,1121,564,1076,551,1017,516,979,465,982,413,974,382,989,366,971,339,971,337,996,295,962"
+        shape="poly">
     </map>
   </div>
 
   <script>
-    // Map hover system
-    const map = document.getElementById('ajk-map');
-    const highlights = {
-      Muzaffarabad: document.getElementById('hover-Muzaffarabad'),
-      Poonch: document.getElementById('hover-Poonch'),
-      Mirpur: document.getElementById('hover-Mirpur')
+    const mainMap = document.getElementById("main-map");
+    const baseImg = "AJK.jpg";
+    const regionImgs = {
+      Muzaffarabad: "Muzaffarabad.jpg",
+      Poonch: "Poonch.jpg",
+      Mirpur: "Mirpur.jpg"
+    };
+    const links = {
+      Mirpur: "https://fantasycurator.github.io/RegionMirpur",
+      Poonch: "#",
+      Muzaffarabad: "#"
     };
 
-    document.querySelectorAll('area').forEach(area => {
-      area.addEventListener('mouseenter', () => {
-        const region = area.alt;
-        const coords = area.coords.split(',').map(Number);
-        const xValues = coords.filter((_, i) => i % 2 === 0);
-        const yValues = coords.filter((_, i) => i % 2 === 1);
-        const minX = Math.min(...xValues);
-        const minY = Math.min(...yValues);
-        const maxX = Math.max(...xValues);
-        const maxY = Math.max(...yValues);
+    let lastClickTime = 0;
+    const DOUBLE_TAP_DELAY = 400; // ms
 
-        const box = highlights[region];
-        box.style.left = minX + "px";
-        box.style.top = minY + "px";
-        box.style.width = (maxX - minX) + "px";
-        box.style.height = (maxY - minY) + "px";
-        box.style.display = "block";
+    document.querySelectorAll("area").forEach(area => {
+      const region = area.alt;
+
+      // Mouse hover (desktop)
+      area.addEventListener("mouseenter", () => {
+        mainMap.src = regionImgs[region];
+      });
+      area.addEventListener("mouseleave", () => {
+        mainMap.src = baseImg;
       });
 
-      area.addEventListener('mouseleave', () => {
-        highlights[area.alt].style.display = "none";
+      // Touch interaction (mobile)
+      area.addEventListener("touchstart", e => {
+        e.preventDefault();
+        const now = Date.now();
+        const timeSince = now - lastClickTime;
+        lastClickTime = now;
+
+        if (timeSince < DOUBLE_TAP_DELAY) {
+          // Double tap → open link
+          if (links[region] && links[region] !== "#") {
+            window.location.href = links[region];
+          }
+        } else {
+          // Single tap → show region image
+          mainMap.src = regionImgs[region];
+          setTimeout(() => (mainMap.src = baseImg), 1500);
+        }
       });
     });
   </script>
