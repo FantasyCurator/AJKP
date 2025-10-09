@@ -1,250 +1,87 @@
 <!DOCTYPE html>
 <html lang="ur">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AJK Interactive Map</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AJK Regions Map</title>
 <style>
-  :root { --double-tap-ms: 420; --preview-duration: 1500; }
-  html,body { height:100%; margin:0; padding:0; font-family: "Segoe UI", "Noto Nastaliq Urdu", sans-serif; background:#f3f7fb; color:#032; direction: rtl; }
-  .page-wrap { display:flex; justify-content:center; padding:18px 12px 36px; }
-  .map-frame {
-    width:100%;
-    max-width:1024px;
-    box-shadow:0 12px 34px rgba(2,24,60,0.10);
-    border-radius:10px;
-    background:#fff;
-    overflow:hidden;
+  :root {
+    --double-tap-ms: 300;
+  }
+  body {
+    margin: 0;
+    background: #e9ecef;
+    font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", sans-serif;
+    overflow-x: hidden;
+  }
+  .map-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  #ajkMap {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
   }
 
-  /* Keep aspect, avoid cropping on zoom */
-  .map-inner { position:relative; width:100%; }
-  img#main-map {
-    width:100%;
-    height:auto;
-    display:block;
-    object-fit:contain; /* helps with various browsers */
-    max-height: 90vh;   /* prevents cropping top/bottom on zoom */
-    border-radius:0;
+  /* Popup styling */
+  #popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
   }
-
-  /* hide default image-map focus outline */
-  area:focus { outline:none; }
-
-  /* Modal (Urdu instructions) */
-  .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.45); display:flex; align-items:center; justify-content:center; z-index:1200; }
-  .modal { background:#fff; border-radius:10px; max-width:720px; width:90%; padding:18px; box-shadow:0 10px 40px rgba(0,0,0,0.18); direction:rtl; }
-  .modal .close { float:left; font-size:20px; line-height:1; cursor:pointer; padding:6px; border-radius:6px; border:1px solid rgba(0,0,0,0.06); background:#f7f7f7; }
-  .modal h3 { margin:0 0 8px 0; color:#032; font-size:18px; }
-  .modal p { margin:0; font-size:15px; color:#1a3747; line-height:1.6; white-space:pre-wrap; }
-
-  /* small note showing active region on small devices (optional visual) */
-  .sr-only { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
-
-  /* improvements: make map responsive to smaller widths */
-  @media (max-width:480px) {
-    .modal { padding:12px; }
-    .modal h3 { font-size:16px; }
-    .modal p { font-size:14px; }
+  #popup-content {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px 35px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    text-align: right;
+    line-height: 1.8;
+    direction: rtl;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  }
+  #popup-content h3 {
+    margin-top: 0;
+    color: #333;
+  }
+  #popup-close {
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    background: transparent;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: #444;
   }
 </style>
 </head>
 <body>
 
-<div class="page-wrap">
-  <div class="map-frame" aria-label="AJK Map Frame">
-    <div class="map-inner">
-      <!-- main map image (lazy loading helps first paint) -->
-      <img id="main-map" src="AJK.jpg" usemap="#ajkmap" alt="AJK Map" loading="lazy">
-      <!-- image map areas (coords from image-map.net that you provided) -->
-      <map name="ajkmap" id="ajkmap">
-        <area alt="Muzaffarabad" title="Muzaffarabad" href="#" shape="poly"
-              coords="536,61,516,72,508,113,492,186,332,260,295,309,292,372,189,369,159,499,195,553,209,646,230,633,243,653,267,674,319,672,341,662,377,672,427,700,488,556,355,469,623,247,764,268,832,317,905,315,971,245,845,218,802,185,757,181,765,124,694,49,665,84,603,92">
-        <area alt="Poonch" title="Poonch" href="#" shape="poly"
-              coords="205,667,209,716,242,782,242,843,253,913,290,945,322,963,365,954,391,964,419,957,451,956,461,884,483,832,535,836,596,807,625,772,608,719,550,694,451,727,431,717,414,723,368,691,294,696,260,692,223,660">
-        <area alt="Mirpur" title="Mirpur" href="https://fantasycurator.github.io/RegionMirpur" shape="poly"
-              coords="246,933,268,984,267,1053,255,1142,298,1233,291,1287,330,1303,392,1350,454,1352,486,1389,543,1408,568,1407,601,1442,622,1444,651,1476,712,1474,681,1323,595,1296,548,1245,479,1207,484,1183,528,1158,556,1121,564,1076,551,1017,516,979,465,982,413,974,382,989,366,971,339,971,337,996,295,962">
-      </map>
-    </div>
-  </div>
-</div>
-
-<!-- Urdu modal on page load -->
-<div id="urduModal" class="modal-backdrop" role="dialog" aria-modal="true" style="display:none;">
-  <div class="modal" role="document">
-    <button class="close" id="modalClose" aria-label="بند کریں">✕</button>
-    <h3>ہدایات</h3>
+<!-- Popup Instructions -->
+<div id="popup">
+  <div id="popup-content">
+    <button id="popup-close">❌</button>
+    <h3>📍 ہدایات:</h3>
     <p>
-📍 اپنے متعلقہ ریجن پر کلک کر کے منتخب کریں۔
-موبائل صارفین ایک بار کلک کر کے ریجن منتخب کریں اور
-دو بار کلک کر کے تفصیلات دیکھیں۔
-
-❌ بند کرنے کے لیے اوپر والا بٹن دبائیں۔
+      اپنے متعلقہ ریجن پر کلک کر کے منتخب کریں۔<br>
+      موبائل صارفین ایک بار کلک کر کے ریجن منتخب کریں اور<br>
+      دو بار کلک کر کے تفصیلات دیکھیں۔<br><br>
     </p>
   </div>
 </div>
 
-<script>
-/* -------------------------
-   Responsive image-map helper
-   - stores original coords and rescales them on load/resize
-   - ensures hover/click areas remain correct at any displayed size
-   ------------------------- */
-
-(function(){
-  const img = document.getElementById('main-map');
-  const map = document.getElementById('ajkmap');
-  const areas = Array.from(map.querySelectorAll('area'));
-
-  // store original coords (from provided HTML) in data-orig
-  areas.forEach(a => {
-    if (!a.dataset.orig) a.dataset.orig = a.getAttribute('coords');
-  });
-
-  // function to rescale coords to current displayed image size
-  function rescaleCoords() {
-    const naturalW = img.naturalWidth || 1024;
-    const naturalH = img.naturalHeight || 1553;
-    const displayW = img.clientWidth;
-    const displayH = img.clientHeight;
-
-    const scaleX = displayW / naturalW;
-    const scaleY = displayH / naturalH;
-
-    areas.forEach(a => {
-      const orig = a.dataset.orig.split(',').map(Number);
-      // compute scaled coords
-      const scaled = orig.map((v, i) => (i % 2 === 0 ? Math.round(v * scaleX) : Math.round(v * scaleY)));
-      // For Poonch: expand top and bottom a bit (in display pixels)
-      if (a.alt === 'Poonch') {
-        // compute bounding box then expand y-range
-        const xs = scaled.filter((_,i)=>i%2===0);
-        const ys = scaled.filter((_,i)=>i%2===1);
-        const minX = Math.min(...xs), maxX = Math.max(...xs);
-        let minY = Math.min(...ys), maxY = Math.max(...ys);
-        // expand top (minY) upward and bottom (maxY) downward by a few pixels (display scale)
-        const expandTop = Math.round(20 * scaleY);   // ~20px in original request scaled
-        const expandBottom = Math.round(20 * scaleY);
-        minY = Math.max(0, minY - expandTop);
-        maxY = Math.min(displayH, maxY + expandBottom);
-        // now rebuild coords by clamping y values to [minY,maxY] where they were outside
-        for (let i=0;i<scaled.length;i+=2){
-          if (scaled[i+1] < minY) scaled[i+1] = minY;
-          if (scaled[i+1] > maxY) scaled[i+1] = maxY;
-        }
-      }
-      a.coords = scaled.join(',');
-    });
-  }
-
-  // Call on load and resize (debounce)
-  function debounce(fn,ms){ let t; return ()=>{ clearTimeout(t); t=setTimeout(fn,ms); }; }
-  window.addEventListener('resize', debounce(rescaleCoords,120));
-  img.addEventListener('load', () => {
-    // initial rescale
-    rescaleCoords();
-
-    // Preload region images after main image first painted (deferred to not block)
-    setTimeout(()=> {
-      ['Mirpur.jpg','Poonch.jpg','Muzaffarabad.jpg'].forEach(src=>{
-        const i = new Image(); i.src = src;
-      });
-    }, 600);
-  });
-
-  // Also call once in case img already cached
-  if (img.complete) setTimeout(rescaleCoords, 30);
-
-  /* -------------------------
-     hover / click / touch behavior
-     - hover (mouseenter/mouseleave) => preview image swap
-     - click (single) => preview (no navigation)
-     - dblclick / double-tap => navigation (Mirpur only goes to real link)
-     ------------------------- */
-
-  const baseSrc = 'AJK.jpg';
-  const regionSrc = { Muzaffarabad:'Muzaffarabad.jpg', Poonch:'Poonch.jpg', Mirpur:'Mirpur.jpg' };
-  const regionLink = { Muzaffarabad:'#', Poonch:'#', Mirpur:'https://fantasycurator.github.io/RegionMirpur' };
-
-  // keep track of last tap/click time to detect double
-  let lastTapTime = 0;
-
-  // Desktop: use mouseenter/mouseleave for preview; use click + dblclick to control behavior
-  areas.forEach(area => {
-    const name = area.alt;
-
-    area.addEventListener('mouseenter', ()=> {
-      // preview immediately
-      if (regionSrc[name]) img.src = regionSrc[name];
-    });
-    area.addEventListener('mouseleave', ()=> {
-      img.src = baseSrc;
-    });
-
-    // prevent default follow of href so we can control single/double click behavior
-    area.addEventListener('click', (ev) => {
-      ev.preventDefault();
-      const now = Date.now();
-      // single click: preview (and clear any pending double)
-      img.src = regionSrc[name] || baseSrc;
-      lastTapTime = now;
-      // set a short timeout to revert preview after preview-duration (unless another event overrides)
-      setTimeout(()=> {
-        // if no double-click followed within threshold, revert back to base
-        if (Date.now() - lastTapTime >= parseInt(getComputedStyle(document.documentElement).getPropertyValue('--double-tap-ms'))) {
-          img.src = baseSrc;
-        }
-      }, parseInt(getComputedStyle(document.documentElement).getPropertyValue('--preview-duration')));
-    });
-
-      // Touch (mobile): single tap preview stays until tap outside; double tap navigate
-      area.addEventListener('touchstart', (ev)=>{
-      ev.preventDefault();
-      const now = Date.now();
-      const gap = now - lastTapTime;
-      lastTapTime = now;
-
-      // single tap -> show and keep region image until user taps elsewhere
-      img.src = regionSrc[name] || baseSrc;
-
-      // double-tap / double-touch within threshold -> navigate (if link exists)
-      if (gap > 0 && gap < parseInt(getComputedStyle(document.documentElement).getPropertyValue('--double-tap-ms'))) {
-        const link = regionLink[name];
-        if (link && link !== '#') {
-          setTimeout(()=> window.location.href = link, 140);
-        }
-      }
-    });
-
-  // click/tap outside areas -> restore base map
-  document.addEventListener('pointerdown', (ev)=>{
-    if (!ev.target.closest('area')) {
-      img.src = baseSrc;
-    }
-  });
-
-  // also touch outside
-  document.addEventListener('touchstart', (ev)=>{
-    if (!ev.target.closest('area')) {
-      setTimeout(()=> img.src = baseSrc, 120);
-    }
-  });
-
-  /* -------------------------
-     Modal (Urdu instructions) show on page load
-     ------------------------- */
-  const modal = document.getElementById('urduModal');
-  const modalClose = document.getElementById('modalClose');
-  // show once on load
-  window.addEventListener('load', ()=> {
-    // show modal slightly deferred so page paint is quick
-    setTimeout(()=> { modal.style.display='flex'; }, 350);
-  });
-  modalClose.addEventListener('click', ()=> { modal.style.display='none'; });
-  // close on Escape
-  window.addEventListener('keydown', (ev)=> { if (ev.key === 'Escape') modal.style.display='none'; });
-
-})();
-</script>
-</body>
-</html>
+<div class="map-container">
+  <img id="ajkMap" src="AJK
