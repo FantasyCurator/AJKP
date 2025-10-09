@@ -197,41 +197,24 @@
       }, parseInt(getComputedStyle(document.documentElement).getPropertyValue('--preview-duration')));
     });
 
-    // desktop double click (dblclick event)
-    area.addEventListener('dblclick', (ev)=>{
-      ev.preventDefault();
-      // only navigate if link is not '#'
-      const link = regionLink[name];
-      if (link && link !== '#') window.location.href = link;
-    });
-
-    // Touch (mobile): single tap preview, double tap navigate
-    area.addEventListener('touchstart', (ev)=>{
+      // Touch (mobile): single tap preview stays until tap outside; double tap navigate
+      area.addEventListener('touchstart', (ev)=>{
       ev.preventDefault();
       const now = Date.now();
       const gap = now - lastTapTime;
       lastTapTime = now;
 
-      // single tap -> preview
+      // single tap -> show and keep region image until user taps elsewhere
       img.src = regionSrc[name] || baseSrc;
 
-      // if double-tap / double-touch within threshold and has real link -> navigate
+      // double-tap / double-touch within threshold -> navigate (if link exists)
       if (gap > 0 && gap < parseInt(getComputedStyle(document.documentElement).getPropertyValue('--double-tap-ms'))) {
         const link = regionLink[name];
         if (link && link !== '#') {
-          // slight delay to allow visual feedback
           setTimeout(()=> window.location.href = link, 140);
         }
-      } else {
-        // revert after preview-duration (if not double)
-        setTimeout(()=> {
-          if (Date.now() - lastTapTime >= parseInt(getComputedStyle(document.documentElement).getPropertyValue('--preview-duration'))) {
-            img.src = baseSrc;
-          }
-        }, parseInt(getComputedStyle(document.documentElement).getPropertyValue('--preview-duration')));
       }
     });
-  });
 
   // click/tap outside areas -> restore base map
   document.addEventListener('pointerdown', (ev)=>{
