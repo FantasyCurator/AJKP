@@ -1,86 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>AJK Interactive Map — refined2</title>
-<style>
-  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#eef4fb;font-family:Segoe UI,Arial}
-  .frame{width:95%;max-width:1024px;box-shadow:0 12px 40px rgba(3,30,70,0.12);border-radius:8px;overflow:hidden;background:#fff}
-  .svg-wrap{position:relative;width:100%;padding-bottom:151.66%}
-  svg{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
-  .hit{fill:transparent;stroke:none;pointer-events:all}
-  .hit:hover{cursor:pointer}
-  image{display:block;width:100%;height:100%}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AJK Interactive Map</title>
+  <style>
+    body {
+      background-color: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .map-container {
+      position: relative;
+      max-width: 1024px;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Region highlight overlays */
+    .highlight {
+      position: absolute;
+      background-color: rgba(0, 255, 100, 0.35);
+      pointer-events: none;
+      mix-blend-mode: multiply;
+      display: none;
+      transition: none;
+    }
+  </style>
 </head>
 <body>
-  <div class="frame">
-    <div class="svg-wrap" id="svgWrap">
-      <svg id="mapSVG" viewBox="0 0 1024 1553" xmlns="http://www.w3.org/2000/svg">
-        <image id="baseImage" href="AJK.jpg" width="1024" height="1553"></image>
+  <div class="map-container">
+    <img src="1 AJK.jpg" usemap="#image-map" id="ajk-map" alt="AJK Map">
 
-        <!-- Mirpur enlarged 40px upward -->
-        <polygon id="mirpurPoly" class="hit"
-          points="80,1110 220,1210 320,1310 420,1410 520,1460 640,1485 720,1460 760,1430 780,1360 760,1310 700,1260 600,1210 480,1160 360,1140 260,1120 160,1100">
-        </polygon>
+    <!-- Hover overlays -->
+    <div id="hover-Muzaffarabad" class="highlight"></div>
+    <div id="hover-Poonch" class="highlight"></div>
+    <div id="hover-Mirpur" class="highlight"></div>
 
-        <!-- Poonch extended 20px left -->
-        <polygon id="poonchPoly" class="hit"
-          points="220,640 250,710 300,770 350,820 410,860 470,890 530,910 590,920 650,910 690,880 710,850 710,820 690,780 640,740 580,700 510,670 450,650 380,640 300,640">
-        </polygon>
-
-        <!-- Muzaffarabad extended left + downward -->
-        <polygon id="muzaffarabadPoly" class="hit"
-          points="480,40 540,60 620,100 700,140 780,200 810,240 820,280 810,320 780,350 750,370 700,380 620,380 540,360 500,320 480,260 460,200 480,140 500,80 
-                  460,80 440,100 420,140 420,180 420,240 440,300 460,340 460,380 460,420 480,440 500,460 540,480 600,500 640,500 700,480 740,460 760,420 760,380">
-        </polygon>
-      </svg>
-    </div>
+    <map name="image-map">
+      <area alt="Muzaffarabad" title="Muzaffarabad" coords="536,61,516,72,508,113,492,186,332,260,295,309,292,372,189,369,159,499,195,553,209,646,230,633,243,653,267,674,319,672,341,662,377,672,427,700,488,556,355,469,623,247,764,268,832,317,905,315,971,245,845,218,802,185,757,181,765,124,694,49,665,84,603,92" shape="poly">
+      <area alt="Poonch" title="Poonch" coords="205,667,209,716,242,782,242,843,253,913,290,945,322,963,365,954,391,964,419,957,451,956,461,884,483,832,535,836,596,807,625,772,608,719,550,694,451,727,431,717,414,723,368,691,294,696,260,692,223,660" shape="poly">
+      <area alt="Mirpur" title="Mirpur" coords="246,933,268,984,267,1053,255,1142,298,1233,291,1287,330,1303,392,1350,454,1352,486,1389,543,1408,568,1407,601,1442,622,1444,651,1476,712,1474,681,1323,595,1296,548,1245,479,1207,484,1183,528,1158,556,1121,564,1076,551,1017,516,979,465,982,413,974,382,989,366,971,339,971,337,996,295,962" shape="poly">
+    </map>
   </div>
 
-<script>
-(function(){
-  const regionData = {
-    mirpurPoly: { img: 'Mirpur.jpg', link: 'https://fantasycurator.github.io/RegionMirpur', clickable: true },
-    poonchPoly: { img: 'Poonch.jpg', link: '#', clickable: false },
-    muzaffarabadPoly: { img: 'Muzaffarabad.jpg', link: '#', clickable: false }
-  };
+  <script>
+    // Map hover system
+    const map = document.getElementById('ajk-map');
+    const highlights = {
+      Muzaffarabad: document.getElementById('hover-Muzaffarabad'),
+      Poonch: document.getElementById('hover-Poonch'),
+      Mirpur: document.getElementById('hover-Mirpur')
+    };
 
-  const baseImage = document.getElementById('baseImage');
-  Object.values(regionData).forEach(r=>{ const i=new Image(); i.src=r.img; });
+    document.querySelectorAll('area').forEach(area => {
+      area.addEventListener('mouseenter', () => {
+        const region = area.alt;
+        const coords = area.coords.split(',').map(Number);
+        const xValues = coords.filter((_, i) => i % 2 === 0);
+        const yValues = coords.filter((_, i) => i % 2 === 1);
+        const minX = Math.min(...xValues);
+        const minY = Math.min(...yValues);
+        const maxX = Math.max(...xValues);
+        const maxY = Math.max(...yValues);
 
-  function swapTo(img){ baseImage.setAttribute('href', img); }
-  function restore(){ baseImage.setAttribute('href', 'AJK.jpg'); }
+        const box = highlights[region];
+        box.style.left = minX + "px";
+        box.style.top = minY + "px";
+        box.style.width = (maxX - minX) + "px";
+        box.style.height = (maxY - minY) + "px";
+        box.style.display = "block";
+      });
 
-  Object.keys(regionData).forEach(id=>{
-    const poly=document.getElementById(id);
-    const info=regionData[id];
-
-    poly.addEventListener('mouseenter',()=>swapTo(info.img));
-    poly.addEventListener('mouseleave',restore);
-    poly.addEventListener('click',e=>{
-      if(info.clickable) window.location.href=info.link;
-      else e.preventDefault();
+      area.addEventListener('mouseleave', () => {
+        highlights[area.alt].style.display = "none";
+      });
     });
-
-    let lastTap=0;
-    poly.addEventListener('touchstart',e=>{
-      e.preventDefault();
-      const now=Date.now();
-      const gap=now-lastTap;
-      swapTo(info.img);
-      if(gap>0&&gap<420&&info.clickable){
-        setTimeout(()=>window.location.href=info.link,120);
-      }
-      lastTap=now;
-    });
-  });
-
-  document.getElementById('mapSVG').addEventListener('pointerdown',e=>{
-    if(!e.target.classList.contains('hit')) restore();
-  });
-})();
-</script>
+  </script>
 </body>
 </html>
