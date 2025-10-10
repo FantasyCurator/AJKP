@@ -79,9 +79,82 @@
       اپنے متعلقہ ریجن پر کلک کر کے منتخب کریں۔<br>
       موبائل صارفین ایک بار کلک کر کے ریجن منتخب کریں اور<br>
       دو بار کلک کر کے تفصیلات دیکھیں۔<br><br>
+      ❌ بند کرنے کے لیے اوپر والا بٹن دبائیں۔
     </p>
   </div>
 </div>
 
 <div class="map-container">
-  <img id="ajkMap" src="AJK
+  <img id="ajkMap" src="AJK.jpg" usemap="#image-map" alt="AJK Map">
+  <map name="image-map">
+    <area alt="Muzaffarabad" title="Muzaffarabad" href="#" coords="536,61,516,72,508,113,492,186,332,260,295,309,292,372,189,369,159,499,195,553,209,646,230,633,243,653,267,674,319,672,341,662,377,672,427,700,488,556,355,469,623,247,764,268,832,317,905,315,971,245,845,218,802,185,757,181,765,124,694,49,665,84,603,92" shape="poly">
+    <area alt="Poonch" title="Poonch" href="#" coords="205,667,209,716,242,782,242,843,253,913,290,945,322,963,365,954,391,964,419,957,451,956,461,884,483,832,535,836,596,807,625,772,608,719,550,694,451,727,431,717,414,723,368,691,294,696,260,692,223,660,205,630,205,770,205,790" shape="poly">
+    <area alt="Mirpur" title="Mirpur" href="#" coords="246,933,268,984,267,1053,255,1142,298,1233,291,1287,330,1303,392,1350,454,1352,486,1389,543,1408,568,1407,601,1442,622,1444,651,1476,712,1474,681,1323,595,1296,548,1245,479,1207,484,1183,528,1158,556,1121,564,1076,551,1017,516,979,465,982,413,974,382,989,366,971,339,971,337,996,295,962" shape="poly">
+  </map>
+</div>
+
+<script>
+const img = document.getElementById('ajkMap');
+const areas = document.querySelectorAll('area');
+
+const baseSrc = 'AJK.jpg';
+const regionSrc = {
+  Muzaffarabad: 'Muzaffarabad.jpg',
+  Poonch: 'Poonch.jpg',
+  Mirpur: 'Mirpur.jpg'
+};
+const regionLink = {
+  Muzaffarabad: '#',
+  Poonch: '#',
+  Mirpur: 'https://fantasycurator.github.io/RegionMirpur'
+};
+
+let lastTapTime = 0;
+
+// Hover (desktop)
+areas.forEach(area=>{
+  const name = area.alt;
+  area.addEventListener('mouseenter', ()=> img.src = regionSrc[name] || baseSrc);
+  area.addEventListener('mouseleave', ()=> img.src = baseSrc);
+
+  // Double click to open link
+  area.addEventListener('dblclick', ()=>{
+    const link = regionLink[name];
+    if (link && link !== '#') window.location.href = link;
+  });
+
+  // Mobile Touch: single tap highlight (stay), double tap open
+  area.addEventListener('touchstart', (ev)=>{
+    ev.preventDefault();
+    const now = Date.now();
+    const gap = now - lastTapTime;
+    lastTapTime = now;
+
+    // Single tap -> show & keep until tap elsewhere
+    img.src = regionSrc[name] || baseSrc;
+
+    // Double tap -> open link
+    if (gap > 0 && gap < parseInt(getComputedStyle(document.documentElement).getPropertyValue('--double-tap-ms'))) {
+      const link = regionLink[name];
+      if (link && link !== '#') {
+        setTimeout(()=> window.location.href = link, 150);
+      }
+    }
+  });
+});
+
+// Touch outside to reset
+document.addEventListener('touchstart', (e)=>{
+  if (![...areas].some(a=>a === e.target)) {
+    img.src = baseSrc;
+  }
+});
+
+// Popup close
+document.getElementById('popup-close').addEventListener('click', ()=> {
+  document.getElementById('popup').style.display = 'none';
+});
+</script>
+
+</body>
+</html>
