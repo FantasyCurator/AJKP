@@ -3,28 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AJK Regions Map</title>
+<title>AJK Interactive Map</title>
+
 <style>
 body {
   margin: 0;
-  background: #e9ecef;
+  background: #eaeef2;
   font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", sans-serif;
   overflow-x: hidden;
 }
+
 .map-container {
   position: relative;
   width: 100%;
-  max-width: 800px;
+  max-width: 900px;
   margin: 20px auto;
 }
-#ajkMap {
+
+img[usemap] {
   width: 100%;
   height: auto;
-  display: block;
-  object-fit: contain;
+  border-radius: 8px;
 }
 
-/* Urdu Popup */
+/* Urdu popup */
 #popup {
   position: fixed;
   inset: 0;
@@ -36,23 +38,19 @@ body {
 }
 #popup-content {
   background: #fff;
-  border-radius: 12px;
   padding: 25px 35px;
+  border-radius: 10px;
   width: 90%;
   max-width: 400px;
   text-align: right;
   direction: rtl;
   line-height: 1.8;
   position: relative;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-}
-#popup-content h3 {
-  margin-top: 0;
-  color: #333;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 #popup-close {
   position: absolute;
-  top: 8px;
+  top: 10px;
   left: 12px;
   background: transparent;
   border: none;
@@ -79,18 +77,25 @@ body {
 </div>
 
 <div class="map-container">
-  <img id="ajkMap" src="AJK.jpg" usemap="#ajkmap" alt="AJK Map">
+  <img src="AJK.jpg" usemap="#ajkmap" alt="AJK Map" id="ajkMap">
   <map name="ajkmap">
-    <area alt="Muzaffarabad" title="Muzaffarabad" href="#" coords="536,61,516,72,508,113,492,186,332,260,295,309,292,372,189,369,159,499,195,553,209,646,230,633,243,653,267,674,319,672,341,662,377,672,427,700,488,556,355,469,623,247,764,268,832,317,905,315,971,245,845,218,802,185,757,181,765,124,694,49,665,84,603,92" shape="poly">
-    <area alt="Poonch" title="Poonch" href="#" coords="205,667,209,716,242,782,242,843,253,913,290,945,322,963,365,954,391,964,419,957,451,956,461,884,483,832,535,836,596,807,625,772,608,719,550,694,451,727,431,717,414,723,368,691,294,696,260,692,223,660,205,630,205,770,205,790" shape="poly">
-    <area alt="Mirpur" title="Mirpur" href="#" coords="246,933,268,984,267,1053,255,1142,298,1233,291,1287,330,1303,392,1350,454,1352,486,1389,543,1408,568,1407,601,1442,622,1444,651,1476,712,1474,681,1323,595,1296,548,1245,479,1207,484,1183,528,1158,556,1121,564,1076,551,1017,516,979,465,982,413,974,382,989,366,971,339,971,337,996,295,962" shape="poly">
+    <area shape="poly" alt="Muzaffarabad" title="Muzaffarabad" href="#" 
+      coords="536,61,516,72,508,113,492,186,332,260,295,309,292,372,189,369,159,499,195,553,209,646,230,633,243,653,267,674,319,672,341,662,377,672,427,700,488,556,355,469,623,247,764,268,832,317,905,315,971,245,845,218,802,185,757,181,765,124,694,49,665,84,603,92">
+    <area shape="poly" alt="Poonch" title="Poonch" href="#" 
+      coords="205,667,209,716,242,782,242,843,253,913,290,945,322,963,365,954,391,964,419,957,451,956,461,884,483,832,535,836,596,807,625,772,608,719,550,694,451,727,431,717,414,723,368,691,294,696,260,692,223,660,205,630,205,770,205,790">
+    <area shape="poly" alt="Mirpur" title="Mirpur" href="#" 
+      coords="246,933,268,984,267,1053,255,1142,298,1233,291,1287,330,1303,392,1350,454,1352,486,1389,543,1408,568,1407,601,1442,622,1444,651,1476,712,1474,681,1323,595,1296,548,1245,479,1207,484,1183,528,1158,556,1121,564,1076,551,1017,516,979,465,982,413,974,382,989,366,971,339,971,337,996,295,962">
   </map>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://rawcdn.githack.com/stowball/jQuery-rwdImageMaps/master/jquery.rwdImageMaps.min.js"></script>
+
 <script>
+$('img[usemap]').rwdImageMaps(); // ✅ auto responsive map
+
 const img = document.getElementById('ajkMap');
 const areas = document.querySelectorAll('area');
-
 const baseImg = 'AJK.jpg';
 const regionImgs = {
   Muzaffarabad: 'Muzaffarabad.jpg',
@@ -106,56 +111,49 @@ const regionLinks = {
 let lastTap = 0;
 let selectedRegion = null;
 
-// ✅ Desktop hover & double click
+// ✅ Desktop hover
 areas.forEach(area => {
   const name = area.alt;
 
   area.addEventListener('mouseenter', () => {
-    if (!selectedRegion) img.src = regionImgs[name] || baseImg;
+    if (!selectedRegion) img.src = regionImgs[name];
   });
-
   area.addEventListener('mouseleave', () => {
     if (!selectedRegion) img.src = baseImg;
   });
 
+  // ✅ Double click open
   area.addEventListener('dblclick', () => {
     const link = regionLinks[name];
     if (link && link !== '#') window.location.href = link;
   });
 
-  // ✅ Mobile: single tap hold, double tap open
+  // ✅ Touch (single = select, double = open)
   area.addEventListener('touchstart', (e) => {
     e.preventDefault();
     const now = Date.now();
     const diff = now - lastTap;
-
-    if (diff < 300 && selectedRegion === name) {
-      // double tap → open
+    if (diff < 350 && selectedRegion === name) {
       const link = regionLinks[name];
       if (link && link !== '#') window.location.href = link;
-      selectedRegion = null;
-      img.src = baseImg;
     } else {
-      // single tap → highlight
       selectedRegion = name;
-      img.src = regionImgs[name] || baseImg;
+      img.src = regionImgs[name];
     }
     lastTap = now;
   });
 });
 
-// Tap outside map → remove highlight
 document.addEventListener('touchstart', (e) => {
-  if (![...areas].some(a => a === e.target)) {
+  if (![...areas].includes(e.target)) {
     selectedRegion = null;
     img.src = baseImg;
   }
 });
 
-// Popup close
-document.getElementById('popup-close').addEventListener('click', () => {
+document.getElementById('popup-close').onclick = () =>
   document.getElementById('popup').style.display = 'none';
-});
 </script>
+
 </body>
 </html>
