@@ -86,7 +86,7 @@ img[usemap] {
       coords="246,933,268,984,267,1053,255,1142,298,1233,291,1287,330,1303,392,1350,454,1352,486,1389,543,1408,568,1407,601,1442,622,1444,651,1476,712,1474,681,1323,595,1296,548,1245,479,1207,484,1183,528,1158,556,1121,564,1076,551,1017,516,979,465,982,413,974,382,989,366,971,339,971,337,996,295,962">
   </map>
 </div>
-
+  
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://rawcdn.githack.com/stowball/jQuery-rwdImageMaps/master/jquery.rwdImageMaps.min.js"></script>
 
@@ -114,24 +114,30 @@ let selectedRegion = null;
 areas.forEach(area => {
   const name = area.alt;
 
-  area.addEventListener('mouseenter', () => {
+  area.addEventListener('mouseenter', (e) => {
+    e.preventDefault();
     if (!selectedRegion) img.src = regionImgs[name];
   });
-  area.addEventListener('mouseleave', () => {
+
+  area.addEventListener('mouseleave', (e) => {
+    e.preventDefault();
     if (!selectedRegion) img.src = baseImg;
   });
 
-  // ✅ Double click open
-  area.addEventListener('dblclick', () => {
+  // ✅ Double click open (desktop)
+  area.addEventListener('dblclick', (e) => {
+    e.preventDefault();
     const link = regionLinks[name];
     if (link && link !== '#') window.location.href = link;
+    return false;
   });
 
-  // ✅ Touch (single = select, double = open)
+  // ✅ Single & Double tap (mobile)
   area.addEventListener('touchstart', (e) => {
     e.preventDefault();
     const now = Date.now();
     const diff = now - lastTap;
+
     if (diff < 350 && selectedRegion === name) {
       const link = regionLinks[name];
       if (link && link !== '#') window.location.href = link;
@@ -140,16 +146,28 @@ areas.forEach(area => {
       img.src = regionImgs[name];
     }
     lastTap = now;
+    return false;
+  });
+
+  // ✅ Prevent scroll-to-top for single click (desktop)
+  area.addEventListener('click', (e) => {
+    e.preventDefault();
+    const name = e.target.alt;
+    selectedRegion = name;
+    img.src = regionImgs[name];
+    return false;
   });
 });
 
-document.addEventListener('touchstart', (e) => {
+// ✅ Click outside resets image
+document.addEventListener('click', (e) => {
   if (![...areas].includes(e.target)) {
     selectedRegion = null;
     img.src = baseImg;
   }
 });
 
+// ✅ Close popup
 document.getElementById('popup-close').onclick = () =>
   document.getElementById('popup').style.display = 'none';
 </script>
