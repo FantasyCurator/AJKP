@@ -5,88 +5,82 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AJK Regions Map</title>
 <style>
-  :root {
-    --double-tap-ms: 300;
-  }
-  body {
-    margin: 0;
-    background: #e9ecef;
-    font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", sans-serif;
-    overflow-x: hidden;
-  }
-  .map-container {
-    position: relative;
-    width: 100%;
-    max-width: 800px;
-    margin: 20px auto;
-  }
-  #ajkMap {
-    width: 100%;
-    height: auto;
-    display: block;
-    object-fit: contain;
-  }
+body {
+  margin: 0;
+  background: #e9ecef;
+  font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", sans-serif;
+  overflow-x: hidden;
+}
+.map-container {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+}
+#ajkMap {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
 
-  /* Popup styling */
-  #popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-  }
-  #popup-content {
-    background: #fff;
-    border-radius: 12px;
-    padding: 25px 35px;
-    width: 90%;
-    max-width: 400px;
-    position: relative;
-    text-align: right;
-    line-height: 1.8;
-    direction: rtl;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-  }
-  #popup-content h3 {
-    margin-top: 0;
-    color: #333;
-  }
-  #popup-close {
-    position: absolute;
-    top: 8px;
-    left: 12px;
-    background: transparent;
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-    color: #444;
-  }
+/* Urdu Popup */
+#popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+#popup-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px 35px;
+  width: 90%;
+  max-width: 400px;
+  text-align: right;
+  direction: rtl;
+  line-height: 1.8;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+#popup-content h3 {
+  margin-top: 0;
+  color: #333;
+}
+#popup-close {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #444;
+}
 </style>
 </head>
 <body>
 
-<!-- Popup Instructions -->
 <div id="popup">
   <div id="popup-content">
     <button id="popup-close">❌</button>
     <h3>📍 ہدایات:</h3>
     <p>
-      اپنے متعلقہ ریجن پر کلک کر کے منتخب کریں۔<br>
-      موبائل صارفین ایک بار کلک کر کے ریجن منتخب کریں اور<br>
-      دو بار کلک کر کے تفصیلات دیکھیں۔<br><br>
-      ❌ بند کرنے کے لیے اوپر والا بٹن دبائیں۔
+      کمپیوٹر پر اپنے ریجن پر ماؤس لے جا کر دیکھیں<br>
+      اور دو بار کلک کر کے تفصیلات کھولیں۔<br><br>
+      موبائل پر ایک بار کلک کرنے سے ریجن منتخب ہوگا<br>
+      اور دو بار کلک کرنے سے تفصیلات کھلیں گی۔<br><br>
+      ❌ بند کرنے کے لیے اوپر بٹن دبائیں۔
     </p>
   </div>
 </div>
 
 <div class="map-container">
-  <img id="ajkMap" src="AJK.jpg" usemap="#image-map" alt="AJK Map">
-  <map name="image-map">
+  <img id="ajkMap" src="AJK.jpg" usemap="#ajkmap" alt="AJK Map">
+  <map name="ajkmap">
     <area alt="Muzaffarabad" title="Muzaffarabad" href="#" coords="536,61,516,72,508,113,492,186,332,260,295,309,292,372,189,369,159,499,195,553,209,646,230,633,243,653,267,674,319,672,341,662,377,672,427,700,488,556,355,469,623,247,764,268,832,317,905,315,971,245,845,218,802,185,757,181,765,124,694,49,665,84,603,92" shape="poly">
     <area alt="Poonch" title="Poonch" href="#" coords="205,667,209,716,242,782,242,843,253,913,290,945,322,963,365,954,391,964,419,957,451,956,461,884,483,832,535,836,596,807,625,772,608,719,550,694,451,727,431,717,414,723,368,691,294,696,260,692,223,660,205,630,205,770,205,790" shape="poly">
     <area alt="Mirpur" title="Mirpur" href="#" coords="246,933,268,984,267,1053,255,1142,298,1233,291,1287,330,1303,392,1350,454,1352,486,1389,543,1408,568,1407,601,1442,622,1444,651,1476,712,1474,681,1323,595,1296,548,1245,479,1207,484,1183,528,1158,556,1121,564,1076,551,1017,516,979,465,982,413,974,382,989,366,971,339,971,337,996,295,962" shape="poly">
@@ -97,64 +91,71 @@
 const img = document.getElementById('ajkMap');
 const areas = document.querySelectorAll('area');
 
-const baseSrc = 'AJK.jpg';
-const regionSrc = {
+const baseImg = 'AJK.jpg';
+const regionImgs = {
   Muzaffarabad: 'Muzaffarabad.jpg',
   Poonch: 'Poonch.jpg',
   Mirpur: 'Mirpur.jpg'
 };
-const regionLink = {
+const regionLinks = {
   Muzaffarabad: '#',
   Poonch: '#',
   Mirpur: 'https://fantasycurator.github.io/RegionMirpur'
 };
 
-let lastTapTime = 0;
+let lastTap = 0;
+let selectedRegion = null;
 
-// Hover (desktop)
-areas.forEach(area=>{
+// ✅ Desktop hover & double click
+areas.forEach(area => {
   const name = area.alt;
-  area.addEventListener('mouseenter', ()=> img.src = regionSrc[name] || baseSrc);
-  area.addEventListener('mouseleave', ()=> img.src = baseSrc);
 
-  // Double click to open link
-  area.addEventListener('dblclick', ()=>{
-    const link = regionLink[name];
+  area.addEventListener('mouseenter', () => {
+    if (!selectedRegion) img.src = regionImgs[name] || baseImg;
+  });
+
+  area.addEventListener('mouseleave', () => {
+    if (!selectedRegion) img.src = baseImg;
+  });
+
+  area.addEventListener('dblclick', () => {
+    const link = regionLinks[name];
     if (link && link !== '#') window.location.href = link;
   });
 
-  // Mobile Touch: single tap highlight (stay), double tap open
-  area.addEventListener('touchstart', (ev)=>{
-    ev.preventDefault();
+  // ✅ Mobile: single tap hold, double tap open
+  area.addEventListener('touchstart', (e) => {
+    e.preventDefault();
     const now = Date.now();
-    const gap = now - lastTapTime;
-    lastTapTime = now;
+    const diff = now - lastTap;
 
-    // Single tap -> show & keep until tap elsewhere
-    img.src = regionSrc[name] || baseSrc;
-
-    // Double tap -> open link
-    if (gap > 0 && gap < parseInt(getComputedStyle(document.documentElement).getPropertyValue('--double-tap-ms'))) {
-      const link = regionLink[name];
-      if (link && link !== '#') {
-        setTimeout(()=> window.location.href = link, 150);
-      }
+    if (diff < 300 && selectedRegion === name) {
+      // double tap → open
+      const link = regionLinks[name];
+      if (link && link !== '#') window.location.href = link;
+      selectedRegion = null;
+      img.src = baseImg;
+    } else {
+      // single tap → highlight
+      selectedRegion = name;
+      img.src = regionImgs[name] || baseImg;
     }
+    lastTap = now;
   });
 });
 
-// Touch outside to reset
-document.addEventListener('touchstart', (e)=>{
-  if (![...areas].some(a=>a === e.target)) {
-    img.src = baseSrc;
+// Tap outside map → remove highlight
+document.addEventListener('touchstart', (e) => {
+  if (![...areas].some(a => a === e.target)) {
+    selectedRegion = null;
+    img.src = baseImg;
   }
 });
 
 // Popup close
-document.getElementById('popup-close').addEventListener('click', ()=> {
+document.getElementById('popup-close').addEventListener('click', () => {
   document.getElementById('popup').style.display = 'none';
 });
 </script>
-
 </body>
 </html>
