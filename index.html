@@ -26,7 +26,44 @@ img[usemap] {
   border-radius: 8px;
 }
 
-/* Urdu popup */
+/* ✅ YouTube icons over the pink boxes */
+.youtube-btn {
+  position: absolute;
+  width: 48px;
+  height: 34px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.youtube-btn:hover {
+  transform: scale(1.1);
+}
+
+/* ✅ Responsive positioning */
+#yt-mobile {
+  top: 95px;   /* adjust to match your pink box */
+  right: 200px;
+}
+#yt-computer {
+  top: 150px;  /* adjust to match your pink box */
+  right: 200px;
+}
+
+@media (max-width: 600px) {
+  #yt-mobile {
+    top: 10%;
+    right: 15%;
+    width: 40px;
+    height: 28px;
+  }
+  #yt-computer {
+    top: 18%;
+    right: 15%;
+    width: 40px;
+    height: 28px;
+  }
+}
+
+/* Popup */
 #popup {
   position: fixed;
   inset: 0;
@@ -77,6 +114,18 @@ img[usemap] {
 
 <div class="map-container">
   <img src="AJK.jpg" usemap="#ajkmap" alt="AJK Map" id="ajkMap">
+
+  <!-- ✅ YouTube Buttons -->
+  <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" 
+       class="youtube-btn" id="yt-mobile"
+       onclick="window.open('https://youtube.com/#','_blank')" 
+       alt="Mobile Tutorial">
+  
+  <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" 
+       class="youtube-btn" id="yt-computer"
+       onclick="window.open('https://youtube.com/#','_blank')" 
+       alt="Computer Tutorial">
+
   <map name="ajkmap">
     <area shape="poly" alt="Muzaffarabad" title="Muzaffarabad" href="#" 
       coords="536,61,516,72,508,113,492,186,332,260,295,309,292,372,189,369,159,499,195,553,209,646,230,633,243,653,267,674,319,672,341,662,377,672,427,700,488,556,355,469,623,247,764,268,832,317,905,315,971,245,845,218,802,185,757,181,765,124,694,49,665,84,603,92">
