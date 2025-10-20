@@ -52,11 +52,39 @@ img[usemap] {
   position: absolute;
   top: 10px;
   left: 12px;
-  background: transparent;
-  border: none;
-  font-size: 22px;
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
-  color: #444;
+  font-size: 20px;
+  line-height: 1;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+#popup-close:hover {
+  background: #ffdddd;
+  color: #b00;
+}
+
+/* 🎥 YouTube icon style */
+.youtube-btn {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 5px;
+}
+.youtube-btn img {
+  width: var(--yt-size, 30px); /* Adjust size here */
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.youtube-btn img:hover {
+  transform: scale(1.1);
 }
 </style>
 </head>
@@ -64,17 +92,20 @@ img[usemap] {
 
 <div id="popup">
   <div id="popup-content">
-    <button id="popup-close">❌</button>
+    <button id="popup-close">×</button>
     <h3>📍 ہدایات:</h3>
     <p>
       کمپیوٹر پر ماؤس اوپر لانے پر ریجن نمایاں ہوگا<br>
       اور دو بار کلک کرنے سے تفصیلات کھلیں گی۔<br>
-      رہنمائی کےلئے ویڈیو دیکھیں۔  ویڈیوون<br><br>
+      رہنمائی کےلئے ویڈیو دیکھیں 
+      <a href="#" target="_blank" class="youtube-btn"><img src="https://www.iconpacks.net/icons/2/free-youtube-logo-icon-2431-thumb.png" alt="YouTube"></a>
+      <br><br>
       موبائل پر ایک بار کلک کرنے سے ریجن منتخب ہوگا<br>
-      اور دو بار کلک کرنے سے تفصیلات کھلیں گی۔ِ<br>
-      رہنمائی کےلئے ویڈیو دیکھیں۔  ویڈیوٹو<br><br>
-             بند کرنے کے لیے اوپر والا ❌ بٹن دبائیں۔
-      
+      اور دو بار کلک کرنے سے تفصیلات کھلیں گی۔<br>
+      رہنمائی کےلئے ویڈیو دیکھیں 
+      <a href="#" target="_blank" class="youtube-btn"><img src="https://www.iconpacks.net/icons/2/free-youtube-logo-icon-2431-thumb.png" alt="YouTube"></a>
+      <br><br>
+      بند کرنے کے لیے اوپر والا ❌ بٹن دبائیں۔
     </p>
   </div>
 </div>
@@ -178,4 +209,3 @@ document.getElementById('popup-close').onclick = () =>
 
 </body>
 </html>
-
