@@ -26,77 +26,7 @@ img[usemap] {
   border-radius: 8px;
 }
 
-/* ✅ Floating guideline box */
-#guideBox {
-  position: absolute;
-  top: 6%;         /* 🔧 micro tuning: adjust top position */
-  left: 5%;        /* 🔧 micro tuning: adjust left position */
-  background: rgba(255, 255, 255, 0.85);
-  padding: 15px 18px;
-  border-radius: 12px;
-  text-align: center;
-  direction: rtl;
-  font-size: 1rem;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.25);
-  width: 180px;    /* 🔧 micro tuning: adjust width */
-  max-width: 45%;
-  z-index: 10;
-}
-
-/* Heading inside box */
-#guideBox h3 {
-  margin-top: 0;
-  color: #b00000;
-  font-size: 1.2rem;
-  margin-bottom: 8px;
-}
-
-/* YouTube buttons section */
-.yt-buttons {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin-top: 8px;
-}
-
-.yt-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-}
-
-.yt-btn img {
-  width: 46px;
-  transition: transform 0.2s;
-}
-.yt-btn img:hover {
-  transform: scale(1.1);
-}
-
-.yt-label {
-  font-size: 0.8rem;
-  color: #000;
-  margin-top: 4px;
-}
-
-/* ✅ Responsive adjustments */
-@media (max-width: 600px) {
-  #guideBox {
-    top: 4%;        /* 🔧 fine tune for mobile */
-    left: 4%;
-    width: 160px;
-    font-size: 0.9rem;
-  }
-  .yt-btn img {
-    width: 38px;
-  }
-  .yt-label {
-    font-size: 0.7rem;
-  }
-}
-
-/* Popup style (original) */
+/* Urdu popup */
 #popup {
   position: fixed;
   inset: 0;
@@ -132,40 +62,24 @@ img[usemap] {
 </head>
 <body>
 
-<!-- ✅ Instruction Popup -->
 <div id="popup">
   <div id="popup-content">
     <button id="popup-close">❌</button>
     <h3>📍 ہدایات:</h3>
     <p>
       کمپیوٹر پر ماؤس اوپر لانے پر ریجن نمایاں ہوگا<br>
-      اور دو بار کلک کرنے سے تفصیلات کھلیں گی۔<br><br>
+      اور دو بار کلک کرنے سے تفصیلات کھلیں گی۔<br>
+       رہنمائی کےلئے ویڈیو دیکھیں<br><br>
       موبائل پر ایک بار کلک کرنے سے ریجن منتخب ہوگا<br>
       اور دو بار کلک کرنے سے تفصیلات کھلیں گی۔
+             رہنمائی کےلئے ویڈیو دیکھیں
+      
     </p>
   </div>
 </div>
 
-<!-- ✅ Map container -->
 <div class="map-container">
   <img src="AJK.jpg" usemap="#ajkmap" alt="AJK Map" id="ajkMap">
-
-  <!-- ✅ Floating Guideline Box -->
-  <div id="guideBox">
-    <h3>ہدایات</h3>
-    <div class="yt-buttons">
-      <div class="yt-btn" onclick="window.open('https://youtube.com/#','_blank')">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" alt="Computer Tutorial">
-        <span class="yt-label">Use on Computer</span>
-      </div>
-      <div class="yt-btn" onclick="window.open('https://youtube.com/#','_blank')">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" alt="Mobile Tutorial">
-        <span class="yt-label">Use on Mobile</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ✅ Map Areas -->
   <map name="ajkmap">
     <area shape="poly" alt="Muzaffarabad" title="Muzaffarabad" href="#" 
       coords="536,61,516,72,508,113,492,186,332,260,295,309,292,372,189,369,159,499,195,553,209,646,230,633,243,653,267,674,319,672,341,662,377,672,427,700,488,556,355,469,623,247,764,268,832,317,905,315,971,245,845,218,802,185,757,181,765,124,694,49,665,84,603,92">
@@ -175,13 +89,12 @@ img[usemap] {
       coords="246,933,268,984,267,1053,255,1142,298,1233,291,1287,330,1303,392,1350,454,1352,486,1389,543,1408,568,1407,601,1442,622,1444,651,1476,712,1474,681,1323,595,1296,548,1245,479,1207,484,1183,528,1158,556,1121,564,1076,551,1017,516,979,465,982,413,974,382,989,366,971,339,971,337,996,295,962">
   </map>
 </div>
-
-<!-- ✅ Scripts -->
+  
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://rawcdn.githack.com/stowball/jQuery-rwdImageMaps/master/jquery.rwdImageMaps.min.js"></script>
 
 <script>
-$('img[usemap]').rwdImageMaps(); // responsive map
+$('img[usemap]').rwdImageMaps(); // ✅ auto responsive map
 
 const img = document.getElementById('ajkMap');
 const areas = document.querySelectorAll('area');
@@ -200,24 +113,30 @@ const regionLinks = {
 let lastTap = 0;
 let selectedRegion = null;
 
-// ✅ Region highlighting logic
+// ✅ Desktop hover
 areas.forEach(area => {
   const name = area.alt;
 
-  area.addEventListener('mouseenter', e => {
+  area.addEventListener('mouseenter', (e) => {
     e.preventDefault();
     if (!selectedRegion) img.src = regionImgs[name];
   });
-  area.addEventListener('mouseleave', e => {
+
+  area.addEventListener('mouseleave', (e) => {
     e.preventDefault();
     if (!selectedRegion) img.src = baseImg;
   });
-  area.addEventListener('dblclick', e => {
+
+  // ✅ Double click open (desktop)
+  area.addEventListener('dblclick', (e) => {
     e.preventDefault();
     const link = regionLinks[name];
     if (link && link !== '#') window.location.href = link;
+    return false;
   });
-  area.addEventListener('touchstart', e => {
+
+  // ✅ Single & Double tap (mobile)
+  area.addEventListener('touchstart', (e) => {
     e.preventDefault();
     const now = Date.now();
     const diff = now - lastTap;
@@ -230,17 +149,21 @@ areas.forEach(area => {
       img.src = regionImgs[name];
     }
     lastTap = now;
+    return false;
   });
-  area.addEventListener('click', e => {
+
+  // ✅ Prevent scroll-to-top for single click (desktop)
+  area.addEventListener('click', (e) => {
     e.preventDefault();
     const name = e.target.alt;
     selectedRegion = name;
     img.src = regionImgs[name];
+    return false;
   });
 });
 
-// ✅ Click outside resets map
-document.addEventListener('click', e => {
+// ✅ Click outside resets image
+document.addEventListener('click', (e) => {
   if (![...areas].includes(e.target)) {
     selectedRegion = null;
     img.src = baseImg;
@@ -251,5 +174,7 @@ document.addEventListener('click', e => {
 document.getElementById('popup-close').onclick = () =>
   document.getElementById('popup').style.display = 'none';
 </script>
+
 </body>
 </html>
+
